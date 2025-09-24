@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Article Test</title>
+</head>
+<body>
+    <h1>Article Loading Test</h1>
+    <div id="output"></div>
+
+    <script>
+        async function testArticleLoading() {
+            const output = document.getElementById('output');
+
+            try {
+                // Test index loading
+                console.log('Testing index loading...');
+                const indexResponse = await fetch('/articles/index.json');
+                console.log('Index response status:', indexResponse.status);
+
+                if (indexResponse.ok) {
+                    const index = await indexResponse.json();
+                    console.log('Index content:', index);
+                    output.innerHTML += '<h2>Index loaded successfully:</h2><pre>' + JSON.stringify(index, null, 2) + '</pre>';
+
+                    // Test loading each article
+                    for (const articleInfo of index.articles) {
+                        const articlePath = `/articles/${articleInfo.category}/${articleInfo.filename}`;
+                        console.log('Testing article:', articlePath);
+
+                        const response = await fetch(articlePath);
+                        console.log(`Article ${articleInfo.filename} status:`, response.status);
+
+                        if (response.ok) {
+                            const content = await response.text();
+                            output.innerHTML += `<h3>✅ ${articleInfo.filename}</h3><p>Length: ${content.length} characters</p>`;
+                        } else {
+                            output.innerHTML += `<h3>❌ ${articleInfo.filename}</h3><p>Status: ${response.status}</p>`;
+                        }
+                    }
+                } else {
+                    output.innerHTML = '<h2>❌ Index loading failed</h2><p>Status: ' + indexResponse.status + '</p>';
+                }
+            } catch (error) {
+                console.error('Test error:', error);
+                output.innerHTML += '<h2>❌ Error:</h2><pre>' + error.message + '</pre>';
+            }
+        }
+
+        // Run test when page loads
+        window.onload = testArticleLoading;
+    </script>
+</body>
+</html>

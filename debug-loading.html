@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Article Loading Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .log { padding: 5px; margin: 2px 0; border-left: 3px solid #ccc; background: #f5f5f5; }
+        .success { border-color: #28a745; background: #d4edda; }
+        .error { border-color: #dc3545; background: #f8d7da; }
+        .info { border-color: #17a2b8; background: #d1ecf1; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Article Loading Debug</h1>
+    <div id="logs"></div>
+
+    <script>
+        const logs = document.getElementById('logs');
+
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `log ${type}`;
+            div.textContent = `${new Date().toLocaleTimeString()} - ${message}`;
+            logs.appendChild(div);
+            console.log(message);
+        }
+
+        async function testArticleLoading() {
+            try {
+                log('🚀 Starting article loading test...', 'info');
+
+                // Test 1: Load index.json
+                log('📥 Testing index.json access...', 'info');
+                const indexResponse = await fetch('/articles/index.json');
+
+                if (!indexResponse.ok) {
+                    log(`❌ Index.json failed: ${indexResponse.status} ${indexResponse.statusText}`, 'error');
+                    return;
+                }
+
+                const index = await indexResponse.json();
+                log(`✅ Index loaded: ${index.articles?.length || 0} articles found`, 'success');
+
+                // Test 2: Try to load each article
+                for (const articleInfo of index.articles) {
+                    const articlePath = `/articles/${articleInfo.category}/${articleInfo.filename}`;
+                    log(`🔍 Testing: ${articlePath}`, 'info');
+
+                    try {
+                        const response = await fetch(articlePath);
+                        if (response.ok) {
+                            const content = await response.text();
+                            log(`✅ ${articleInfo.filename}: ${content.length} chars`, 'success');
+
+                            // Test frontmatter parsing
+                            const lines = content.split('\n');
+                            if (lines[0] === '---') {
+                                const endIndex = lines.findIndex((line, i) => i > 0 && line === '---');
+                                if (endIndex > 0) {
+                                    log(`📋 ${articleInfo.filename}: Has frontmatter (${endIndex} lines)`, 'success');
+                                } else {
+                                    log(`⚠️ ${articleInfo.filename}: Frontmatter not properly closed`, 'error');
+                                }
+                            } else {
+                                log(`⚠️ ${articleInfo.filename}: No frontmatter found`, 'error');
+                            }
+                        } else {
+                            log(`❌ ${articleInfo.filename}: ${response.status} ${response.statusText}`, 'error');
+                        }
+                    } catch (error) {
+                        log(`💥 ${articleInfo.filename}: ${error.message}`, 'error');
+                    }
+                }
+
+                log('🎯 Loading test complete!', 'success');
+
+            } catch (error) {
+                log(`💥 Test failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Run test when page loads
+        window.onload = testArticleLoading;
+    </script>
+</body>
+</html>

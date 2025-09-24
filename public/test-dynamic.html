@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Article Loading Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .article { border: 1px solid #ccc; margin: 10px 0; padding: 15px; border-radius: 5px; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .info { background: #d1ecf1; border-color: #b8daff; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Dynamic Article Loading Test</h1>
+    <div id="status">Loading...</div>
+    <div id="articles"></div>
+
+    <script>
+        async function testDynamicLoading() {
+            const statusDiv = document.getElementById('status');
+            const articlesDiv = document.getElementById('articles');
+
+            try {
+                statusDiv.innerHTML = '📡 Loading index.json...';
+
+                // Test index loading
+                const indexResponse = await fetch('/articles/index.json');
+                if (!indexResponse.ok) throw new Error(`Index failed: ${indexResponse.status}`);
+
+                const index = await indexResponse.json();
+                statusDiv.innerHTML = `✅ Index loaded successfully: ${index.articles.length} articles found`;
+
+                articlesDiv.innerHTML = '<h2>📋 Articles in Index:</h2>';
+
+                // Test each article loading
+                for (const articleInfo of index.articles) {
+                    const articlePath = `/articles/${articleInfo.category}/${articleInfo.filename}`;
+
+                    try {
+                        const response = await fetch(articlePath);
+                        if (response.ok) {
+                            const content = await response.text();
+
+                            // Try to parse frontmatter
+                            const lines = content.split('\n');
+                            const frontmatterEnd = lines.findIndex((line, i) => i > 0 && line === '---');
+                            const frontmatter = lines.slice(1, frontmatterEnd).join('\n');
+
+                            articlesDiv.innerHTML += `
+                                <div class="article success">
+                                    <h3>✅ ${articleInfo.filename}</h3>
+                                    <p><strong>Category:</strong> ${articleInfo.category}</p>
+                                    <p><strong>Path:</strong> ${articlePath}</p>
+                                    <p><strong>Size:</strong> ${content.length} characters</p>
+                                    <details>
+                                        <summary>Frontmatter</summary>
+                                        <pre>${frontmatter}</pre>
+                                    </details>
+                                </div>
+                            `;
+                        } else {
+                            articlesDiv.innerHTML += `
+                                <div class="article error">
+                                    <h3>❌ ${articleInfo.filename}</h3>
+                                    <p><strong>Error:</strong> Status ${response.status}</p>
+                                    <p><strong>Path:</strong> ${articlePath}</p>
+                                </div>
+                            `;
+                        }
+                    } catch (error) {
+                        articlesDiv.innerHTML += `
+                            <div class="article error">
+                                <h3>💥 ${articleInfo.filename}</h3>
+                                <p><strong>Error:</strong> ${error.message}</p>
+                                <p><strong>Path:</strong> ${articlePath}</p>
+                            </div>
+                        `;
+                    }
+                }
+
+                statusDiv.innerHTML += '<br><br>🔄 Now go to <a href="/">Homepage</a> to see if articles appear!';
+
+            } catch (error) {
+                statusDiv.innerHTML = `❌ Error: ${error.message}`;
+                console.error('Test error:', error);
+            }
+        }
+
+        // Run test when page loads
+        window.onload = testDynamicLoading;
+    </script>
+</body>
+</html>
