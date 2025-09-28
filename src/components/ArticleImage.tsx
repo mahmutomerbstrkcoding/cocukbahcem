@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { resolveImageUrl, getCategoryPlaceholder, isExternalUrl } from '@/utils/imageUtils';
+import { resolveImageUrl, getCategoryPlaceholder } from '@/utils/imageUtils';
 
 interface ArticleImageProps {
   src?: string;
@@ -44,24 +44,7 @@ export const ArticleImage: React.FC<ArticleImageProps> = ({
     img.src = resolvedUrl;
   }, [src, category]);
 
-  const getImageTypeIndicator = () => {
-    if (!src) return null;
-
-    return (
-      <div className="absolute top-2 right-2 z-10">
-        <span
-          className={`px-2 py-1 text-xs rounded-full text-white font-medium ${
-            isExternalUrl(src)
-              ? 'bg-blue-500 bg-opacity-80'
-              : 'bg-green-500 bg-opacity-80'
-          }`}
-          title={isExternalUrl(src) ? 'External Image' : 'Local Image'}
-        >
-          {isExternalUrl(src) ? '🌐' : '📁'}
-        </span>
-      </div>
-    );
-  };
+  // Image type indicator function removed as requested
 
   if (imageState === 'loading') {
     return (
@@ -90,7 +73,7 @@ export const ArticleImage: React.FC<ArticleImageProps> = ({
           }
         }}
       />
-      {getImageTypeIndicator()}
+      {/* Image type indicator removed as requested */}
 
       {/* Image source overlay for development */}
       {process.env.NODE_ENV === 'development' && (
