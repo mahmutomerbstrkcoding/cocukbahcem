@@ -6,6 +6,7 @@ import { Calendar, Clock, Tag, ArrowLeft } from 'lucide-react';
 import { Article, ArticleMetadata } from '@/domain';
 import { FileAdapterLocal, GetArticleMetadata } from '@/infrastructure';
 import { ArticleCard } from '@/components/ArticleCard';
+import { ArticleImage } from '@/components/ArticleImage';
 import { ShareButtons } from '@/components/ShareButtons';
 
 export const ArticlePage: React.FC = () => {
@@ -166,16 +167,15 @@ export const ArticlePage: React.FC = () => {
         </div>
 
         {/* Featured Image */}
-        {article.previewImage && (
-          <div className="mt-8 aspect-video rounded-xl overflow-hidden bg-gray-100">
-            <img
-              src={article.previewImage}
-              alt={article.title}
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
-          </div>
-        )}
+        <div className="mt-8 aspect-video rounded-xl overflow-hidden bg-gray-100">
+          <ArticleImage
+            src={article.previewImage}
+            alt={article.title}
+            category={article.category}
+            className="w-full h-full"
+            loadingClassName="bg-gray-200"
+          />
+        </div>
       </header>
 
       {/* Article Content */}
