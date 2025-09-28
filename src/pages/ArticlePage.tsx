@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import rehypeSanitize from 'rehype-sanitize';
-import { Calendar, Clock, Tag, ArrowLeft, Share2 } from 'lucide-react';
+import { Calendar, Clock, Tag, ArrowLeft } from 'lucide-react';
 import { Article, ArticleMetadata } from '@/domain';
 import { FileAdapterLocal, GetArticleMetadata } from '@/infrastructure';
 import { ArticleCard } from '@/components/ArticleCard';
+import { ShareButtons } from '@/components/ShareButtons';
 
 export const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -80,23 +81,7 @@ export const ArticlePage: React.FC = () => {
     return colors[category] || 'bg-gray-100 text-gray-800';
   };
 
-  const handleShare = async () => {
-    if (navigator.share && article) {
-      try {
-        await navigator.share({
-          title: article.title,
-          text: article.description,
-          url: window.location.href,
-        });
-      } catch (err) {
-        console.log('Share cancelled or failed:', err);
-      }
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href);
-      // You could show a toast notification here
-    }
-  };
+  // Share functionality moved to ShareButtons component
 
   const handleRelatedArticleClick = (relatedArticle: ArticleMetadata) => {
     navigate(`/article/${relatedArticle.slug}`);
@@ -142,32 +127,18 @@ export const ArticlePage: React.FC = () => {
 
       {/* Article Header */}
       <header className="mb-8">
-        {/* Category & SEO Score */}
+        {/* Category & Share */}
         <div className="flex items-center justify-between mb-4">
           <span className={`px-3 py-1 text-sm font-medium rounded-full ${getCategoryColor(article.category)}`}>
             {getCategoryLabel(article.category)}
           </span>
 
           <div className="flex items-center space-x-3">
-            {article.seoScore && (
-              <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                article.seoScore >= 80
-                  ? 'bg-green-100 text-green-800'
-                  : article.seoScore >= 60
-                  ? 'bg-yellow-100 text-yellow-800'
-                  : 'bg-red-100 text-red-800'
-              }`}>
-                SEO: {article.seoScore}
-              </span>
-            )}
-
-            <button
-              onClick={handleShare}
-              className="p-2 text-gray-600 hover:text-primary-600 hover:bg-gray-50 rounded-lg transition-colors"
-              title="Paylaş"
-            >
-              <Share2 className="w-4 h-4" />
-            </button>
+            <ShareButtons
+              title={article.title}
+              description={article.description}
+              url={window.location.href}
+            />
           </div>
         </div>
 
