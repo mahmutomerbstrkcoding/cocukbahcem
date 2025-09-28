@@ -1,15 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import { HomePage, ArticlePage, ArticlesPage, AdminPage } from './pages';
+import { HomePage, ArticlePage, ArticlesPage, SearchPage, AdminPage } from './pages';
 import { DebugPage } from './pages/DebugPage';
 import { ImageDemoPage } from './pages/ImageDemoPage';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
   const handleSearch = (query: string) => {
-    // TODO: Implement search functionality
-    console.log('Search query:', query);
+    // Navigate to search page with query
+    if (query.trim()) {
+      window.location.href = `/search?q=${encodeURIComponent(query.trim())}`;
+    }
   };
 
   return (
@@ -22,6 +24,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/articles" element={<ArticlesPage />} />
+              <Route path="/search" element={<SearchPage />} />
               <Route path="/article/:slug" element={<ArticlePage />} />
               <Route path="/admin" element={<AdminPage />} />
               <Route path="/debug" element={<DebugPage />} />

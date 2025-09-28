@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, MessageCircle, Copy, Check } from 'lucide-react';
+import { Mail, MessageCircle, Copy, Check, Share2 } from 'lucide-react';
 
 interface ShareButtonsProps {
   title: string;
@@ -70,7 +70,7 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({ title, description, 
         className="p-2 text-gray-600 hover:text-primary-600 hover:bg-gray-50 rounded-lg transition-colors"
         title="Paylaş"
       >
-        <MessageCircle className="w-4 h-4" />
+        <Share2 className="w-4 h-4" />
       </button>
 
       {/* Custom share menu for non-native share devices */}

@@ -179,42 +179,47 @@ export const ArticlePage: React.FC = () => {
       </header>
 
       {/* Article Content */}
-      <article className="prose prose-lg max-w-none mb-12">
+      <article className="prose prose-lg max-w-none mb-12 break-words">
         <ReactMarkdown
           rehypePlugins={[rehypeSanitize]}
           components={{
             h1: ({ children }) => (
-              <h1 className="text-2xl sm:text-3xl font-display font-bold text-gray-900 mt-8 mb-4">
+              <h1 className="text-2xl sm:text-3xl font-display font-bold text-gray-900 mt-8 mb-4 break-words">
                 {children}
               </h1>
             ),
             h2: ({ children }) => (
-              <h2 className="text-xl sm:text-2xl font-display font-semibold text-gray-900 mt-6 mb-3">
+              <h2 className="text-xl sm:text-2xl font-display font-semibold text-gray-900 mt-6 mb-3 break-words">
                 {children}
               </h2>
             ),
             h3: ({ children }) => (
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mt-4 mb-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mt-4 mb-2 break-words">
                 {children}
               </h3>
             ),
             p: ({ children }) => (
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-gray-700 leading-relaxed mb-4 break-words overflow-wrap-anywhere">
                 {children}
               </p>
             ),
             ul: ({ children }) => (
-              <ul className="list-disc list-inside space-y-2 mb-4 text-gray-700">
+              <ul className="list-disc list-inside space-y-2 mb-4 text-gray-700 break-words">
                 {children}
               </ul>
             ),
             ol: ({ children }) => (
-              <ol className="list-decimal list-inside space-y-2 mb-4 text-gray-700">
+              <ol className="list-decimal list-inside space-y-2 mb-4 text-gray-700 break-words">
                 {children}
               </ol>
             ),
+            li: ({ children }) => (
+              <li className="break-words overflow-wrap-anywhere">
+                {children}
+              </li>
+            ),
             blockquote: ({ children }) => (
-              <blockquote className="border-l-4 border-primary-500 pl-4 italic text-gray-600 my-6">
+              <blockquote className="border-l-4 border-primary-500 pl-4 italic text-gray-600 my-6 break-words">
                 {children}
               </blockquote>
             ),
@@ -222,19 +227,29 @@ export const ArticlePage: React.FC = () => {
               <img
                 src={src}
                 alt={alt}
-                className="rounded-lg shadow-sm my-6 w-full"
+                className="rounded-lg shadow-sm my-6 w-full max-w-full"
                 loading="lazy"
               />
             ),
             a: ({ href, children }) => (
               <a
                 href={href}
-                className="text-primary-600 hover:text-primary-700 underline"
+                className="text-primary-600 hover:text-primary-700 underline break-all"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 {children}
               </a>
+            ),
+            code: ({ children }) => (
+              <code className="bg-gray-100 px-1 py-0.5 rounded text-sm break-all">
+                {children}
+              </code>
+            ),
+            pre: ({ children }) => (
+              <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto break-all">
+                {children}
+              </pre>
             ),
           }}
         >
