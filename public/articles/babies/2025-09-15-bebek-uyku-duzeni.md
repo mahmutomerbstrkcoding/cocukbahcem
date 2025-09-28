@@ -5,7 +5,7 @@ date: 2025-09-15
 category: babies
 slug: bebek-uyku-duzeni-nasil-kurulur
 description: "0-12 aylık bebekler için uyku düzeni kurma rehberi. Gece uykusuzluğuna son verin!"
-previewImage: "/assets/images/baby-sleep.jpg"
+previewImage: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=400&fit=crop&auto=format"
 tags: ["bebek", "uyku", "rutiler", "gelişim"]
 readingTime: 6
 seoScore: 100

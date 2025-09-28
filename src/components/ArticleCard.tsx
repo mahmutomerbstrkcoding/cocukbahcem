@@ -1,6 +1,7 @@
 import React from 'react';
-import { Clock, Calendar, Tag } from 'lucide-react';
+import { Clock, Calendar } from 'lucide-react';
 import { ArticleMetadata } from '@/domain';
+import { ArticleImage } from './ArticleImage';
 
 interface ArticleCardProps {
   article: ArticleMetadata;
@@ -56,24 +57,16 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article, onClick }) =>
     >
       {/* Image */}
       <div className="relative aspect-video mb-4 overflow-hidden rounded-lg bg-gray-100">
-        {article.previewImage ? (
-          <img
-            src={article.previewImage}
-            alt={article.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            loading="lazy"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-400">
-            <div className="text-center">
-              <Tag className="w-12 h-12 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">Görsel yok</p>
-            </div>
-          </div>
-        )}
+        <ArticleImage
+          src={article.previewImage}
+          alt={article.title}
+          category={article.category}
+          className="w-full h-full"
+          loadingClassName="bg-gray-200"
+        />
 
         {/* Category Badge */}
-        <div className="absolute top-3 left-3">
+        <div className="absolute top-3 left-3 z-20">
           <span className={`px-2 py-1 text-xs font-medium rounded-full ${getCategoryColor(article.category)}`}>
             {getCategoryLabel(article.category)}
           </span>

@@ -3,6 +3,7 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HomePage, ArticlePage, AdminPage } from './pages';
 import { DebugPage } from './pages/DebugPage';
+import { ImageDemoPage } from './pages/ImageDemoPage';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
               <Route path="/article/:slug" element={<ArticlePage />} />
               <Route path="/admin" element={<AdminPage />} />
               <Route path="/debug" element={<DebugPage />} />
+              <Route path="/image-demo" element={<ImageDemoPage />} />
               <Route path="/pregnancy" element={<HomePage category="pregnancy" />} />
               <Route path="/babies" element={<HomePage category="babies" />} />
               <Route path="/family" element={<HomePage category="family" />} />

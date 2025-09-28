@@ -5,7 +5,7 @@ date: 2025-09-01
 category: pregnancy
 slug: hamilelikte-beslenme-rehberi
 description: "Hamilelik döneminde sağlıklı beslenme için kapsamlı rehber. Hangi besinleri almalı, hangilerinden kaçınmalısınız?"
-previewImage: "/assets/images/pregnancy-nutrition.jpg"
+previewImage: "https://images.unsplash.com/photo-1583327117605-7c2ca4f8e4c7?w=600&h=400&fit=crop&auto=format"
 tags: ["hamilelik", "beslenme", "sağlık", "anne"]
 readingTime: 8
 seoScore: 100
