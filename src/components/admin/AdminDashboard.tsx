@@ -4,14 +4,15 @@ import { Article, ArticleMetadata } from '../../domain/entities/Article';
 import { GetArticleMetadata } from '../../application/usecases/GetArticleMetadata';
 import { FileAdapterLocal } from '../../infrastructure/adapters/FileAdapterLocal';
 import { ArticleEditor } from './ArticleEditor';
-import { Plus, Edit, Trash2, Eye, BarChart3, Users, TrendingUp, LogOut } from 'lucide-react';
+import { AdsConfigPanel } from './AdsConfigPanel';
+import { Plus, Edit, Trash2, Eye, BarChart3, Users, TrendingUp, LogOut, Settings } from 'lucide-react';
 
 const fileAdapter = FileAdapterLocal.getInstance();
 
 export const AdminDashboard: React.FC = () => {
   const { logout, user } = useAuth();
   const [articles, setArticles] = useState<ArticleMetadata[]>([]);
-  const [currentView, setCurrentView] = useState<'dashboard' | 'editor' | 'articles'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'editor' | 'articles' | 'ads'>('dashboard');
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -126,6 +127,45 @@ export const AdminDashboard: React.FC = () => {
     );
   }
 
+  if (currentView === 'ads') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50">
+        <header className="bg-white/80 backdrop-blur-sm shadow-sm border-b border-gray-200 sticky top-0 z-40">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center py-4">
+              <div>
+                <h1 className="text-3xl font-display font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
+                  Admin Panel
+                </h1>
+                <p className="text-gray-600 mt-1">
+                  Hoş geldin, {user?.username} • Google Ads Yönetimi
+                </p>
+              </div>
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => setCurrentView('dashboard')}
+                  className="px-4 py-2 rounded-lg font-medium text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  Dashboard'a Dön
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Çıkış</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </header>
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <AdsConfigPanel />
+        </main>
+      </div>
+    );
+  }
+
   const stats = getStats();
 
   return (
@@ -163,6 +203,17 @@ export const AdminDashboard: React.FC = () => {
                 }`}
               >
                 Makaleler
+              </button>
+              <button
+                onClick={() => setCurrentView('ads')}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+                  currentView === 'ads'
+                    ? 'bg-primary-100 text-primary-700'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <Settings className="w-4 h-4" />
+                <span>Reklamlar</span>
               </button>
               <button
                 onClick={handleNewArticle}

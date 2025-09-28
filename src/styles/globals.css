@@ -45,4 +45,35 @@
     word-break: break-all;
     overflow-wrap: anywhere;
   }
+
+  /* Ad Banner Styles */
+  .ad-banner {
+    @apply flex flex-col items-center justify-center min-h-[120px] bg-gray-50 border border-gray-200 rounded-lg;
+  }
+
+  .ad-banner::before {
+    content: "Reklam";
+    @apply text-xs text-gray-500 uppercase tracking-wider mb-2;
+  }
+
+  .mobile-ad {
+    @apply mx-auto max-w-sm;
+  }
+
+  .desktop-ad {
+    @apply mx-auto max-w-md;
+  }
+
+  .sidebar-ad {
+    @apply w-full max-w-xs;
+  }
+
+  /* Article content with ads spacing */
+  .article-content-with-ads .prose-section {
+    @apply mb-4;
+  }
+
+  .article-content-with-ads .prose-section:last-child {
+    @apply mb-0;
+  }
 }
