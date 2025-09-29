@@ -34,9 +34,9 @@ export class Category {
 
 // Predefined categories
 export const CATEGORIES = {
-  PREGNANCY: new Category('pregnancy', 'Hamilelik', 'Hamilelik dönemi ile ilgili içerikler'),
-  BABIES: new Category('babies', 'Bebekler', 'Bebek bakımı ve gelişimi'),
-  FAMILY: new Category('family', 'Aile', 'Aile hayatı ve ebeveynlik'),
-  TIPS: new Category('tips', 'İpuçları', 'Pratik ipuçları ve öneriler'),
-  HEALTH: new Category('health', 'Sağlık', 'Anne ve bebek sağlığı'),
+  FAMILY: new Category('aile-hayati', 'Aile Hayatı', 'Aile hayatı ve ebeveynlik deneyimleri'),
+  BABIES: new Category('bebekler', 'Bebekler', 'Bebek bakımı ve gelişimi'),
+  PREGNANCY: new Category('hamilelik', 'Hamilelik', 'Hamilelik dönemi ile ilgili içerikler'),
+  PRESCHOOL: new Category('okul-oncesi', 'Okul Öncesi', 'Okul öncesi dönem ve eğitim'),
+  TIPS: new Category('ipuclari', 'İpuçları', 'Pratik ipuçları ve öneriler'),
 } as const;

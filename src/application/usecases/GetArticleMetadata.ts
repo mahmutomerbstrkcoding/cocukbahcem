@@ -1,5 +1,6 @@
 import { Article, ArticleMetadata } from '@/domain';
 import { FileAdapterLocal } from '@/infrastructure';
+import { mapOldCategoryToNew } from '@/utils/categoryMapping';
 
 export interface GetArticleFilters {
   category?: string;
@@ -49,7 +50,20 @@ export class GetArticleMetadata {
   }
 
   async getByCategory(category: string): Promise<ArticleMetadata[]> {
-    return await this.fileAdapter.getArticlesByCategory(category);
+    console.log(`🏷️ GetArticleMetadata.getByCategory called with category: ${category}`);
+
+    // The category parameter is already the file system category name (mapped by HomePage)
+    // So we use it directly without additional mapping
+    const articles = await this.fileAdapter.getArticlesByCategory(category);
+    console.log(`📊 Found ${articles.length} articles for category ${category}`);
+
+    // Update the category field in returned articles to use new naming
+    const updatedArticles = articles.map(article => ({
+      ...article,
+      category: mapOldCategoryToNew(article.category)
+    }));
+
+    return updatedArticles;
   }
 
   async getFeatured(count: number = 3): Promise<ArticleMetadata[]> {

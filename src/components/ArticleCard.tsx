@@ -2,6 +2,7 @@ import React from 'react';
 import { Clock, Calendar } from 'lucide-react';
 import { ArticleMetadata } from '@/domain';
 import { ArticleImage } from './ArticleImage';
+import { getCategoryDisplayName, getCategoryIcon } from '@/utils/categoryMapping';
 
 interface ArticleCardProps {
   article: ArticleMetadata;
@@ -15,20 +16,32 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article, onClick }) =>
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      pregnancy: 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg',
-      babies: 'bg-gradient-to-r from-secondary-500 to-secondary-600 text-white shadow-lg',
-      family: 'bg-gradient-to-r from-success-500 to-success-600 text-white shadow-lg',
-      tips: 'bg-gradient-to-r from-accent-500 to-accent-600 text-white shadow-lg',
+      pregnancy: 'bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-md',
+      babies: 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md',
+      family: 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-md',
+      tips: 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-white shadow-md',
+      preschool: 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-md',
+      // New category mappings
+      hamilelik: 'bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-md',
+      bebekler: 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md',
+      'aile-hayati': 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-md',
+      ipuclari: 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-white shadow-md',
+      'okul-oncesi': 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-md',
     };
-    return colors[category] || 'bg-gradient-to-r from-gray-500 to-gray-600 text-white shadow-lg';
+    return colors[category] || 'bg-gradient-to-r from-gray-500 to-gray-600 text-white shadow-md';
   };
 
   const getCategoryLabel = (category: string) => {
+    // Use the utility function for display names, fallback to mapping
+    const displayName = getCategoryDisplayName(category);
+    if (displayName !== category) return displayName;
+
     const labels: Record<string, string> = {
       pregnancy: 'Hamilelik',
       babies: 'Bebekler',
-      family: 'Aile',
+      family: 'Aile Hayatı',
       tips: 'İpuçları',
+      preschool: 'Okul Öncesi',
     };
     return labels[category] || category;
   };
@@ -67,8 +80,9 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article, onClick }) =>
 
         {/* Category Badge */}
         <div className="absolute top-3 left-3 z-20">
-          <span className={`px-2 py-1 text-xs font-medium rounded-full ${getCategoryColor(article.category)}`}>
-            {getCategoryLabel(article.category)}
+          <span className={`inline-flex items-center space-x-1 px-3 py-1 text-xs font-medium rounded-full ${getCategoryColor(article.category)}`}>
+            <span className="text-sm">{getCategoryIcon(article.category)}</span>
+            <span>{getCategoryLabel(article.category)}</span>
           </span>
         </div>
       </div>

@@ -116,8 +116,8 @@ export const ArticlePage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-500"></div>
+      <div className="min-h-screen flex items-center justify-center" style={{background: 'linear-gradient(135deg, #f7b2bd 0%, #a8d8ea 50%, #ffd93d 100%)'}}>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-white/70"></div>
       </div>
     );
   }
@@ -142,7 +142,8 @@ export const ArticlePage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-white rounded-lg shadow-sm my-8">
       {/* Back Button */}
       <button
         onClick={() => navigate(-1)}
@@ -286,6 +287,7 @@ export const ArticlePage: React.FC = () => {
           </div>
         </section>
       )}
+    </div>
     </div>
   );
 };

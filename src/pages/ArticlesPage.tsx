@@ -4,6 +4,7 @@ import { ArticleCard } from '@/components/ArticleCard';
 import { ArticleMetadata } from '@/domain';
 import { FileAdapterLocal, GetArticleMetadata } from '@/infrastructure';
 import { SmartAd } from '@/components/SmartAd';
+import { getCategoryDisplayName, getCategoryIcon } from '@/utils/categoryMapping';
 
 export const ArticlesPage: React.FC = () => {
   const [articles, setArticles] = useState<ArticleMetadata[]>([]);
@@ -46,41 +47,36 @@ export const ArticlesPage: React.FC = () => {
   };
 
   const getCategoryTitle = (category: string) => {
-    const titles: Record<string, string> = {
-      all: 'Tüm Makaleler',
-      pregnancy: 'Hamilelik',
-      babies: 'Bebekler',
-      family: 'Aile',
-      tips: 'İpuçları',
-    };
-    return titles[category] || category;
+    if (category === 'all') return 'Tüm Makaleler';
+    return getCategoryDisplayName(category);
   };
 
   const categories = [
     { key: 'all', title: 'Tümü', icon: '📚' },
-    { key: 'pregnancy', title: 'Hamilelik', icon: '🤱' },
-    { key: 'babies', title: 'Bebekler', icon: '👶' },
-    { key: 'family', title: 'Aile', icon: '👨‍👩‍👧‍👦' },
-    { key: 'tips', title: 'İpuçları', icon: '💡' },
+    { key: 'aile-hayati', title: 'Aile Hayatı', icon: getCategoryIcon('aile-hayati') },
+    { key: 'bebekler', title: 'Bebekler', icon: getCategoryIcon('bebekler') },
+    { key: 'hamilelik', title: 'Hamilelik', icon: getCategoryIcon('hamilelik') },
+    { key: 'okul-oncesi', title: 'Okul Öncesi', icon: getCategoryIcon('okul-oncesi') },
+    { key: 'ipuclari', title: 'İpuçları', icon: getCategoryIcon('ipuclari') },
   ];
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-500"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#f7b2bd]"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-display font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
             Tüm Makaleler
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Anne ve bebek sağlığı konularında uzman önerileri ve pratik rehberler
           </p>
         </div>
@@ -93,8 +89,8 @@ export const ArticlesPage: React.FC = () => {
               onClick={() => setSelectedCategory(category.key)}
               className={`flex items-center space-x-2 px-4 py-2 rounded-full font-medium transition-all duration-300 ${
                 selectedCategory === category.key
-                  ? 'bg-primary-500 text-white shadow-lg transform scale-105'
-                  : 'bg-white text-gray-600 hover:bg-primary-50 hover:text-primary-600 shadow-sm'
+                  ? 'bg-[#f7b2bd] text-white shadow-lg transform scale-105'
+                  : 'bg-white text-gray-700 hover:bg-[#f7b2bd] hover:text-white shadow-sm border'
               }`}
             >
               <span className="text-lg">{category.icon}</span>

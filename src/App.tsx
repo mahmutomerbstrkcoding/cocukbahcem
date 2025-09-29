@@ -29,10 +29,18 @@ function App() {
               <Route path="/admin" element={<AdminPage />} />
               <Route path="/debug" element={<DebugPage />} />
               <Route path="/image-demo" element={<ImageDemoPage />} />
+              {/* Old category routes for backward compatibility */}
               <Route path="/pregnancy" element={<HomePage category="pregnancy" />} />
               <Route path="/babies" element={<HomePage category="babies" />} />
               <Route path="/family" element={<HomePage category="family" />} />
               <Route path="/tips" element={<HomePage category="tips" />} />
+
+              {/* New category routes */}
+              <Route path="/aile-hayati" element={<HomePage category="aile-hayati" />} />
+              <Route path="/bebekler" element={<HomePage category="bebekler" />} />
+              <Route path="/hamilelik" element={<HomePage category="hamilelik" />} />
+              <Route path="/okul-oncesi" element={<HomePage category="okul-oncesi" />} />
+              <Route path="/ipuclari" element={<HomePage category="ipuclari" />} />
             </Routes>
           </main>
 

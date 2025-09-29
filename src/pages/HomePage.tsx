@@ -6,6 +6,7 @@ import { ArticleMetadata } from '@/domain';
 import { FileAdapterLocal, GetArticleMetadata } from '@/infrastructure';
 import { getAdSlot, shouldShowAd } from '@/utils/adUtils';
 import { useAdsConfig } from '@/hooks/useAdsConfig';
+import { getCategoryDisplayName, getCategoryIcon, mapNewCategoryToOld } from '@/utils/categoryMapping';
 
 interface HomePageProps {
   category?: string;
@@ -46,7 +47,12 @@ export const HomePage: React.FC<HomePageProps> = ({ category }) => {
       if (category) {
         console.log(`📂 Loading articles for category: ${category}`);
         setDebugInfo(`Loading category: ${category}`);
-        const categoryArticles = await getArticleMetadata.getByCategory(category);
+
+        // Map new category to old category for file system lookup
+        const fileSystemCategory = mapNewCategoryToOld(category);
+        console.log(`🔄 Mapped category ${category} to filesystem category: ${fileSystemCategory}`);
+
+        const categoryArticles = await getArticleMetadata.getByCategory(fileSystemCategory);
         console.log(`📊 Found ${categoryArticles.length} articles for category ${category}:`, categoryArticles);
         setDebugInfo(`Found ${categoryArticles.length} articles for category ${category}`);
         setArticles(categoryArticles);
@@ -78,21 +84,17 @@ export const HomePage: React.FC<HomePageProps> = ({ category }) => {
   };
 
   const getCategoryTitle = (cat?: string) => {
-    const titles: Record<string, string> = {
-      pregnancy: 'Hamilelik',
-      babies: 'Bebekler',
-      family: 'Aile',
-      tips: 'İpuçları',
-    };
-    return cat ? titles[cat] || cat : 'Tüm Makaleler';
+    if (!cat) return 'Tüm Makaleler';
+    return getCategoryDisplayName(cat);
   };
 
   const getCategoryDescription = (cat?: string) => {
     const descriptions: Record<string, string> = {
-      pregnancy: 'Hamilelik dönemi, beslenme ve sağlık bilgileri',
-      babies: 'Bebek bakımı, gelişim ve sağlık rehberleri',
-      family: 'Aile yaşamı ve ebeveynlik önerileri',
-      tips: 'Pratik ipuçları ve günlük hayat önerileri',
+      'hamilelik': 'Hamilelik dönemi, beslenme ve sağlık bilgileri',
+      'bebekler': 'Bebek bakımı, gelişim ve sağlık rehberleri',
+      'aile-hayati': 'Aile yaşamı ve ebeveynlik önerileri',
+      'ipuclari': 'Pratik ipuçları ve günlük hayat önerileri',
+      'okul-oncesi': 'Okul öncesi eğitim ve gelişim rehberleri',
     };
     return cat ? descriptions[cat] || '' : 'Anne ve bebek sağlığı hakkında en güncel makaleler';
   };
@@ -107,78 +109,97 @@ export const HomePage: React.FC<HomePageProps> = ({ category }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Hero Section */}
-        {!category && featured.length > 0 && (
-          <section className="mb-12">
-            <div className="text-center mb-12 relative">
-              {/* Background decoration */}
-              <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-100 rounded-full opacity-20 animate-pulse-slow"></div>
-                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary-100 rounded-full opacity-20 animate-pulse-slow" style={{animationDelay: '1s'}}></div>
-              </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section - Only show gradient here */}
+      {!category && featured.length > 0 && (
+        <section className="py-16" style={{background: 'linear-gradient(135deg, #f7b2bd 0%, #a8d8ea 50%, #ffd93d 100%)'}}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12 relative overflow-hidden">
+              {/* Floating pattern background */}
+              <div
+                className="absolute inset-0 opacity-10"
+                style={{
+                  background: 'linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%)',
+                  backgroundSize: '60px 60px',
+                  animation: 'float 20s ease-in-out infinite'
+                }}
+              ></div>
 
               {/* Content */}
               <div className="relative z-10">
-                <div className="inline-block mb-6">
-                  <span className="px-4 py-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-full text-sm font-medium shadow-lg">
-                    ✨ Güvenilir Anne & Bebek Rehberi
-                  </span>
-                </div>
-
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold bg-gradient-to-r from-primary-600 via-secondary-600 to-accent-600 bg-clip-text text-transparent mb-6">
-                  Çocuk Bahçem
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 drop-shadow-sm">
+                  🌸 Merhaba, Sevgili Anne! 👋
                 </h1>
 
-                <p className="text-xl sm:text-2xl text-gray-700 max-w-4xl mx-auto leading-relaxed mb-8">
-                  Anne ve bebek sağlığı, hamilelik süreçleri ve aile yaşamına dair
-                  <span className="text-primary-600 font-semibold"> uzman tavsiyeleri</span> ve
-                  <span className="text-secondary-600 font-semibold"> pratik rehberler</span>
+                <p className="text-lg sm:text-xl text-white/90 max-width-600 mx-auto leading-relaxed mb-8 max-w-2xl">
+                  Çocuk yetiştirme yolculuğunda her adımda yanınızdayız.<br />
+                  Uzman tavsiyeleri, deneyimli anne önerileri ve sevgi dolu<br />
+                  rehberlik burada.
                 </p>
 
-                <div className="flex flex-wrap justify-center gap-4 mb-8">
-                  <div className="flex items-center space-x-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm">
-                    <span className="w-2 h-2 bg-success-500 rounded-full animate-pulse"></span>
-                    <span className="text-sm text-gray-600">Uzman İçerik</span>
+                <div className="flex flex-wrap justify-center gap-6 mb-8">
+                  <div className="flex items-center space-x-3 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full shadow-md border border-white/20">
+                    <span className="text-2xl">✨</span>
+                    <span className="text-base text-gray-700 font-medium">Uzman Tavsiyeleri</span>
                   </div>
-                  <div className="flex items-center space-x-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm">
-                    <span className="w-2 h-2 bg-warning-500 rounded-full animate-pulse"></span>
-                    <span className="text-sm text-gray-600">Güncel Bilgiler</span>
+                  <div className="flex items-center space-x-3 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full shadow-md border border-white/20">
+                    <span className="text-2xl">😊</span>
+                    <span className="text-base text-gray-700 font-medium">Anne Deneyimleri</span>
                   </div>
-                  <div className="flex items-center space-x-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm">
-                    <span className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></span>
-                    <span className="text-sm text-gray-600">Pratik Öneriler</span>
+                  <div className="flex items-center space-x-3 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full shadow-md border border-white/20">
+                    <span className="text-2xl">🌱</span>
+                    <span className="text-base text-gray-700 font-medium">Çocuk Gelişimi</span>
                   </div>
                 </div>
-              </div>
-            </div>          {/* Featured Articles */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featured.map((article) => (
-              <div key={article.id} className="relative">
-                <ArticleCard article={article} onClick={handleArticleClick} />
-                <div className="absolute -top-3 -left-3 bg-primary-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                  Öne Çıkan
+
+                <div className="mb-8">
+                  <button
+                    onClick={() => navigate('/articles')}
+                    className="inline-block bg-white text-[#f7b2bd] px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 hover:-translate-y-0.5 transition-all duration-300"
+                  >
+                    🛒 En Popüler Yazıları Keşfet
+                  </button>
                 </div>
               </div>
-            ))}
+            </div>
+
+            {/* Featured Articles */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {featured.map((article) => (
+                <div key={article.id} className="relative">
+                  <ArticleCard article={article} onClick={handleArticleClick} />
+                  <div className="absolute -top-3 -left-3 bg-primary-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    Öne Çıkan
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       )}
 
-      {/* Category Header */}
-      {category && (
-        <section className="mb-8">
-          <div className="text-center">
-            <h1 className="text-3xl sm:text-4xl font-display font-bold text-gray-900 mb-4">
-              {getCategoryTitle(category)}
-            </h1>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              {getCategoryDescription(category)}
-            </p>
-          </div>
-        </section>
-      )}
+      {/* Content Container - White background */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        {/* Category Header */}
+        {category && (
+          <section className="mb-12 pt-8">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-[#f7b2bd] to-[#a8d8ea] rounded-full mb-6">
+                <span className="text-3xl">{getCategoryIcon(category)}</span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                {getCategoryTitle(category)}
+              </h1>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                {getCategoryDescription(category)}
+              </p>
+              <div className="mt-6 text-sm text-gray-500">
+                {articles.length} makale bulundu
+              </div>
+            </div>
+          </section>
+        )}
 
       {/* Articles Grid */}
       <section className="relative">
@@ -235,7 +256,7 @@ export const HomePage: React.FC<HomePageProps> = ({ category }) => {
 
         {articles.length > 0 ? (
           <div className="relative z-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className={`grid gap-6 ${category ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'}`}>
               {articles.map((article) => (
                 <ArticleCard
                   key={article.id}
@@ -287,17 +308,18 @@ export const HomePage: React.FC<HomePageProps> = ({ category }) => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {[
-              { key: 'pregnancy', title: 'Hamilelik', description: 'Hamilelik süreci rehberleri', icon: '🤱', gradient: 'from-primary-100 to-primary-200' },
-              { key: 'babies', title: 'Bebekler', description: 'Bebek bakımı ve gelişimi', icon: '👶', gradient: 'from-secondary-100 to-secondary-200' },
-              { key: 'family', title: 'Aile', description: 'Aile yaşamı önerileri', icon: '👨‍👩‍👧‍👦', gradient: 'from-accent-100 to-accent-200' },
-              { key: 'tips', title: 'İpuçları', description: 'Pratik günlük ipuçları', icon: '💡', gradient: 'from-warning-100 to-warning-200' },
+              { key: 'hamilelik', title: 'Hamilelik', description: 'Hamilelik süreci rehberleri', icon: '🤱', gradient: 'from-pink-100 to-pink-200' },
+              { key: 'bebekler', title: 'Bebekler', description: 'Bebek bakımı ve gelişimi', icon: '👶', gradient: 'from-blue-100 to-blue-200' },
+              { key: 'aile-hayati', title: 'Aile Hayatı', description: 'Aile yaşamı önerileri', icon: '👨‍👩‍👧‍👦', gradient: 'from-green-100 to-green-200' },
+              { key: 'okul-oncesi', title: 'Okul Öncesi', description: 'Okul öncesi eğitim', icon: '🎒', gradient: 'from-purple-100 to-purple-200' },
+              { key: 'ipuclari', title: 'İpuçları', description: 'Pratik günlük ipuçları', icon: '💡', gradient: 'from-yellow-100 to-yellow-200' },
             ].map((cat, index) => (
               <button
                 key={cat.key}
                 onClick={() => navigate(`/${cat.key}`)}
-                className={`relative p-8 bg-gradient-to-br ${cat.gradient} rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-3 text-left group border border-white/50 hover:border-white overflow-hidden`}
+                className={`relative p-6 bg-gradient-to-br ${cat.gradient} rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-3 text-left group border border-white/50 hover:border-white overflow-hidden`}
                 style={{
                   animationDelay: `${index * 150}ms`
                 }}
