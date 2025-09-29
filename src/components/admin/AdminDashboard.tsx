@@ -9,10 +9,12 @@ import { Plus, Edit, Trash2, Eye, BarChart3, Users, TrendingUp, LogOut, Settings
 
 const fileAdapter = FileAdapterLocal.getInstance();
 
+type AdminView = 'dashboard' | 'articles' | 'editor' | 'ads';
+
 export const AdminDashboard: React.FC = () => {
   const { logout, user } = useAuth();
   const [articles, setArticles] = useState<ArticleMetadata[]>([]);
-  const [currentView, setCurrentView] = useState<'dashboard' | 'editor' | 'articles' | 'ads'>('dashboard');
+  const [currentView, setCurrentView] = useState<AdminView>('dashboard');
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -209,7 +211,7 @@ export const AdminDashboard: React.FC = () => {
               <button
                 onClick={() => setCurrentView('ads')}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-                  currentView === 'ads'
+                  (currentView as AdminView) === 'ads'
                     ? 'bg-primary-100 text-primary-700'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}

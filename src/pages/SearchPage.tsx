@@ -4,6 +4,7 @@ import { Search, ArrowLeft } from 'lucide-react';
 import { ArticleCard } from '@/components/ArticleCard';
 import { ArticleMetadata } from '@/domain';
 import { FileAdapterLocal, GetArticleMetadata } from '@/infrastructure';
+import { SmartAd } from '@/components/SmartAd';
 
 export const SearchPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -124,6 +125,15 @@ export const SearchPage: React.FC = () => {
         {/* Results */}
         {searchQuery ? (
           <>
+            {/* Top Banner Ad */}
+            <div className="mb-8">
+              <SmartAd
+                type="banner"
+                size="large"
+                className="mx-auto"
+              />
+            </div>
+
             {/* Results Count */}
             <div className="text-center mb-8">
               <p className="text-gray-600">
@@ -200,6 +210,15 @@ export const SearchPage: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* Footer Ad */}
+        <div className="mt-12">
+          <SmartAd
+            type="footer"
+            size="large"
+            className="mx-auto"
+          />
+        </div>
       </div>
     </div>
   );

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArticleCard } from '@/components/ArticleCard';
+import { SmartAd } from '@/components/SmartAd';
 import { ArticleMetadata } from '@/domain';
 import { FileAdapterLocal, GetArticleMetadata } from '@/infrastructure';
+import { getAdSlot, shouldShowAd } from '@/utils/adUtils';
 
 interface HomePageProps {
   category?: string;
@@ -257,6 +259,18 @@ export const HomePage: React.FC<HomePageProps> = ({ category }) => {
         )}
       </section>
 
+      {/* Mid-page Ad */}
+      {!category && shouldShowAd('inline', 'desktop') && (
+        <section className="mt-12 mb-8">
+          <SmartAd
+            type="inline"
+            size="large"
+            slotId={getAdSlot('articleMiddle')}
+            className="text-center"
+          />
+        </section>
+      )}
+
       {/* Categories Section (only on homepage) */}
       {!category && (
         <section className="mt-16">
@@ -313,6 +327,18 @@ export const HomePage: React.FC<HomePageProps> = ({ category }) => {
               </button>
             ))}
           </div>
+        </section>
+      )}
+
+      {/* Bottom Ad */}
+      {shouldShowAd('footer', 'desktop') && (
+        <section className="mt-16 mb-8">
+          <SmartAd
+            type="footer"
+            size="large"
+            slotId={getAdSlot('articleBottom')}
+            className="text-center"
+          />
         </section>
       )}
       </div>

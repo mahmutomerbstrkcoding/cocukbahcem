@@ -6,7 +6,7 @@ import { saveAs } from 'file-saver';
 import { Article, ArticleMetadata } from '../../domain/entities/Article';
 import { GetArticleMetadata } from '../../application/usecases/GetArticleMetadata';
 import { FileAdapterLocal } from '../../infrastructure/adapters/FileAdapterLocal';
-import { Save, Eye, EyeOff, Upload, AlertTriangle, CheckCircle, Download } from 'lucide-react';
+import { Save, Eye, EyeOff, Upload, AlertTriangle, CheckCircle } from 'lucide-react';
 
 interface ArticleFormData {
   title: string;

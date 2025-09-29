@@ -7,10 +7,9 @@ import { ArticleCard } from '@/components/ArticleCard';
 import { ArticleImage } from '@/components/ArticleImage';
 import { ShareButtons } from '@/components/ShareButtons';
 import { ArticleContentWithAds } from '@/components/ArticleContentWithAds';
-import { ResponsiveAdBanner, SidebarAdBanner } from '@/components/AdBanner';
+import { SmartAd } from '@/components/SmartAd';
 import { useAdPlacements } from '@/hooks/useDeviceType';
-import { shouldShowAd } from '@/utils/adUtils';
-import { getAdSlot } from '@/config/adsConfig';
+import { shouldShowAd, getAdSlot } from '@/utils/adUtils';
 
 export const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -34,6 +33,16 @@ export const ArticlePage: React.FC = () => {
       loadArticle(slug);
     }
   }, [slug]);
+
+  // Record article view for ads management
+  useEffect(() => {
+    if (article) {
+      // Dynamically import recordArticleView to avoid circular dependencies
+      import('../utils/adUtils').then(({ recordArticleView }) => {
+        recordArticleView();
+      });
+    }
+  }, [article]);
 
   const loadArticle = async (articleSlug: string) => {
     try {
@@ -189,6 +198,18 @@ export const ArticlePage: React.FC = () => {
         </div>
       </header>
 
+      {/* Top Banner Ad - Desktop only */}
+      {adPlacements.deviceType === 'desktop' && shouldShowAd('banner', 'desktop') && (
+        <div className="mb-8">
+          <SmartAd
+            type="banner"
+            size="large"
+            slotId={getAdSlot('desktopBanner')}
+            className="text-center"
+          />
+        </div>
+      )}
+
       {/* Article Content */}
       <div className="flex flex-col lg:flex-row gap-8 mb-12">
         <article className="prose prose-lg max-w-none flex-1 break-words">
@@ -199,7 +220,12 @@ export const ArticlePage: React.FC = () => {
         {showSidebarAd && (
           <aside className="w-full lg:w-80 flex-shrink-0">
             <div className="sticky top-8">
-              <SidebarAdBanner adSlot={getAdSlot('sidebar')} />
+              <SmartAd
+                type="sidebar"
+                size="medium"
+                slotId={getAdSlot('sidebar')}
+                className="mb-6"
+              />
             </div>
           </aside>
         )}
@@ -208,7 +234,12 @@ export const ArticlePage: React.FC = () => {
       {/* Footer Ad */}
       {showFooterAd && (
         <div className="mb-8">
-          <ResponsiveAdBanner adSlot={getAdSlot('articleBottom')} />
+          <SmartAd
+            type="footer"
+            size="large"
+            slotId={getAdSlot('articleBottom')}
+            className="mb-6"
+          />
         </div>
       )}
 

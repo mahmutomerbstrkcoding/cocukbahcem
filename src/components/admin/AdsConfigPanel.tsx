@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { adsConfig, AdsConfig } from '../../config/adsConfig';
-import { Settings, Eye, EyeOff, Save, AlertCircle } from 'lucide-react';
+import { AdsManager } from '../../utils/adsManager';
+import { Settings, Eye, EyeOff, Save, AlertCircle, BarChart3, RefreshCw } from 'lucide-react';
+import { SmartAd } from '../SmartAd';
 
 export const AdsConfigPanel: React.FC = () => {
   const [config, setConfig] = useState<AdsConfig>(adsConfig);
   const [isModified, setIsModified] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [adsManager] = useState(() => AdsManager.getInstance());
+  const [displayStats, setDisplayStats] = useState(() => adsManager.getDisplayStats());
 
   const handleToggleAds = () => {
     const newConfig = { ...config, enabled: !config.enabled };
@@ -32,27 +36,42 @@ export const AdsConfigPanel: React.FC = () => {
   };
 
   const handlePlacementChange = (
-    device: 'mobile' | 'desktop',
+    device: 'mobile' | 'desktop' | 'frequency',
     setting: string,
     value: boolean | number
   ) => {
-    const newConfig = {
-      ...config,
-      placements: {
-        ...config.placements,
-        [device]: {
-          ...config.placements[device],
+    if (device === 'frequency') {
+      const newConfig = {
+        ...config,
+        frequency: {
+          ...config.frequency,
           [setting]: value
         }
-      }
-    };
-    setConfig(newConfig);
-    setIsModified(true);
+      };
+      setConfig(newConfig);
+      setIsModified(true);
+    } else {
+      const newConfig = {
+        ...config,
+        placements: {
+          ...config.placements,
+          [device]: {
+            ...config.placements[device],
+            [setting]: value
+          }
+        }
+      };
+      setConfig(newConfig);
+      setIsModified(true);
+    }
   };
 
   const handleSave = () => {
     // Update the global config
     Object.assign(adsConfig, config);
+
+    // Update ads manager with new config
+    adsManager.updateConfig(config);
 
     // In a real application, you would save this to a backend
     // For now, we'll just update the in-memory config
@@ -206,6 +225,30 @@ export const AdsConfigPanel: React.FC = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Mobil İçerik Arası Reklam Slot ID
+              </label>
+              <input
+                type="text"
+                value={config.adSlots.mobileInline}
+                onChange={(e) => handleAdSlotChange('mobileInline', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Masaüstü Banner Reklam Slot ID
+              </label>
+              <input
+                type="text"
+                value={config.adSlots.desktopBanner}
+                onChange={(e) => handleAdSlotChange('desktopBanner', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -213,7 +256,7 @@ export const AdsConfigPanel: React.FC = () => {
       {/* Mobile Placement Settings */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          Mobil Reklam Yerleşimi
+          📱 Mobil Reklam Yerleşimi
         </h3>
 
         <div className="space-y-4">
@@ -227,17 +270,44 @@ export const AdsConfigPanel: React.FC = () => {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Kaçıncı paragraftan sonra reklam göster
-            </label>
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-gray-700">İçerik arası reklamları göster</span>
             <input
-              type="number"
-              min="1"
-              value={config.placements.mobile.showAfterParagraph}
-              onChange={(e) => handlePlacementChange('mobile', 'showAfterParagraph', parseInt(e.target.value))}
-              className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              type="checkbox"
+              checked={config.placements.mobile.showInlineAds}
+              onChange={(e) => handlePlacementChange('mobile', 'showInlineAds', e.target.checked)}
+              className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
             />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Kaçıncı paragraftan sonra reklam göster
+              </label>
+              <input
+                type="number"
+                min="1"
+                max="10"
+                value={config.placements.mobile.showAfterParagraph}
+                onChange={(e) => handlePlacementChange('mobile', 'showAfterParagraph', parseInt(e.target.value))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Sayfa başına maksimum reklam sayısı
+              </label>
+              <input
+                type="number"
+                min="1"
+                max="10"
+                value={config.placements.mobile.maxAdsPerPage}
+                onChange={(e) => handlePlacementChange('mobile', 'maxAdsPerPage', parseInt(e.target.value))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -245,7 +315,7 @@ export const AdsConfigPanel: React.FC = () => {
       {/* Desktop Placement Settings */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          Masaüstü Reklam Yerleşimi
+          🖥️ Masaüstü Reklam Yerleşimi
         </h3>
 
         <div className="space-y-4">
@@ -269,30 +339,350 @@ export const AdsConfigPanel: React.FC = () => {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Kaçıncı paragraftan sonra reklam göster
-            </label>
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-gray-700">Üst banner reklamı göster</span>
             <input
-              type="number"
-              min="1"
-              value={config.placements.desktop.showAfterParagraph}
-              onChange={(e) => handlePlacementChange('desktop', 'showAfterParagraph', parseInt(e.target.value))}
-              className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              type="checkbox"
+              checked={config.placements.desktop.showBannerAd}
+              onChange={(e) => handlePlacementChange('desktop', 'showBannerAd', e.target.checked)}
+              className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
             />
+          </div>
+
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Paragraf sonrası reklam
+              </label>
+              <input
+                type="number"
+                min="1"
+                max="10"
+                value={config.placements.desktop.showAfterParagraph}
+                onChange={(e) => handlePlacementChange('desktop', 'showAfterParagraph', parseInt(e.target.value))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Sidebar reklam sayısı
+              </label>
+              <input
+                type="number"
+                min="0"
+                max="5"
+                value={config.placements.desktop.sidebarAdCount}
+                onChange={(e) => handlePlacementChange('desktop', 'sidebarAdCount', parseInt(e.target.value))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Maksimum reklam/sayfa
+              </label>
+              <input
+                type="number"
+                min="1"
+                max="15"
+                value={config.placements.desktop.maxAdsPerPage}
+                onChange={(e) => handlePlacementChange('desktop', 'maxAdsPerPage', parseInt(e.target.value))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Preview Section */}
-      <div className="bg-gray-50 rounded-lg p-6">
+      {/* Frequency Control */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          Reklam Önizlemesi
+          ⏱️ Reklam Görüntüleme Sıklığı
         </h3>
-        <div className="text-sm text-gray-600 space-y-2">
-          <p>• Reklamlar şu anda: <strong>{config.enabled ? 'Aktif' : 'Pasif'}</strong></p>
-          <p>• Mobil: {config.placements.mobile.showAfterParagraph}. paragraf sonrası + {config.placements.mobile.showInFooter ? 'Alt kısım' : 'Alt kısım yok'}</p>
-          <p>• Masaüstü: {config.placements.desktop.showAfterParagraph}. paragraf sonrası + {config.placements.desktop.showSidebar ? 'Sidebar' : 'Sidebar yok'} + {config.placements.desktop.showInFooter ? 'Alt kısım' : 'Alt kısım yok'}</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Reklam göstermeden önce okunacak makale sayısı
+            </label>
+            <input
+              type="number"
+              min="0"
+              max="10"
+              value={config.frequency.articlesViewedBeforeAd}
+              onChange={(e) => handlePlacementChange('frequency' as any, 'articlesViewedBeforeAd', parseInt(e.target.value))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            />
+            <p className="text-xs text-gray-500 mt-1">0 = her makale açıldığında reklam göster</p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Aynı kullanıcıya reklam arası (dakika)
+            </label>
+            <input
+              type="number"
+              min="1"
+              max="60"
+              value={config.frequency.adDisplayInterval}
+              onChange={(e) => handlePlacementChange('frequency' as any, 'adDisplayInterval', parseInt(e.target.value))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            />
+            <p className="text-xs text-gray-500 mt-1">Aynı kullanıcıya ne kadar aralıkla reklam gösterilsin</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Statistics Section */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+            <BarChart3 className="w-5 h-5 mr-2 text-blue-600" />
+            Reklam İstatistikleri
+          </h3>
+          <div className="flex space-x-2">
+            <button
+              onClick={() => setDisplayStats(adsManager.getDisplayStats())}
+              className="flex items-center space-x-2 px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+            >
+              <RefreshCw className="w-4 h-4" />
+              <span>Yenile</span>
+            </button>
+            <button
+              onClick={() => {
+                adsManager.resetState();
+                setDisplayStats(adsManager.getDisplayStats());
+              }}
+              className="flex items-center space-x-2 px-3 py-1 text-sm bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-colors"
+            >
+              <RefreshCw className="w-4 h-4" />
+              <span>Sıfırla</span>
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="text-2xl font-bold text-blue-900">{displayStats.articlesViewed}</div>
+            <div className="text-sm text-blue-600">Okunan Makale</div>
+          </div>
+
+          <div className="bg-green-50 p-4 rounded-lg">
+            <div className="text-2xl font-bold text-green-900">
+              {displayStats.lastAdDisplayTime > 0
+                ? Math.floor((Date.now() - displayStats.lastAdDisplayTime) / (1000 * 60))
+                : '∞'
+              }
+            </div>
+            <div className="text-sm text-green-600">Son Reklamdan Bu Yana (dk)</div>
+          </div>
+
+          <div className="bg-purple-50 p-4 rounded-lg">
+            <div className="text-2xl font-bold text-purple-900">
+              {adsManager.shouldShowAds() ? '✓' : '✗'}
+            </div>
+            <div className="text-sm text-purple-600">Reklam Gösterim Durumu</div>
+          </div>
+        </div>
+
+        <div className="mt-4 p-3 bg-yellow-50 rounded-lg">
+          <p className="text-sm text-yellow-800">
+            <strong>Not:</strong> Bu istatistikler localStorage'da saklanır ve tarayıcıya özeldir.
+            Gerçek uygulamada bu veriler sunucuda tutulmalıdır.
+          </p>
+        </div>
+      </div>
+
+      {/* Preview Section */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-200">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+          <Eye className="w-5 h-5 mr-2 text-blue-600" />
+          Reklam Yapılandırması Özeti
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* General Status */}
+          <div className="space-y-3">
+            <div className="flex items-center">
+              <div className={`w-3 h-3 rounded-full mr-2 ${config.enabled ? 'bg-green-500' : 'bg-red-500'}`}></div>
+              <span className="text-sm font-medium">
+                Reklamlar: <strong>{config.enabled ? 'Aktif' : 'Pasif'}</strong>
+              </span>
+            </div>
+            <div className="text-sm text-gray-600">
+              <p>• {config.frequency.articlesViewedBeforeAd} makale sonrası reklam</p>
+              <p>• {config.frequency.adDisplayInterval} dakika reklam arası</p>
+            </div>
+          </div>
+
+          {/* Device Breakdown */}
+          <div className="space-y-3">
+            <div className="text-sm">
+              <p className="font-medium text-gray-900 mb-2">📱 Mobil Ayarları:</p>
+              <ul className="text-gray-600 space-y-1 ml-4">
+                <li>• Maks. {config.placements.mobile.maxAdsPerPage} reklam/sayfa</li>
+                <li>• {config.placements.mobile.showAfterParagraph}. paragraf sonrası</li>
+                <li>• {config.placements.mobile.showInlineAds ? '✓' : '✗'} İçerik arası</li>
+                <li>• {config.placements.mobile.showInFooter ? '✓' : '✗'} Alt kısım</li>
+              </ul>
+            </div>
+
+            <div className="text-sm">
+              <p className="font-medium text-gray-900 mb-2">🖥️ Masaüstü Ayarları:</p>
+              <ul className="text-gray-600 space-y-1 ml-4">
+                <li>• Maks. {config.placements.desktop.maxAdsPerPage} reklam/sayfa</li>
+                <li>• {config.placements.desktop.showAfterParagraph}. paragraf sonrası</li>
+                <li>• {config.placements.desktop.showBannerAd ? '✓' : '✗'} Üst banner</li>
+                <li>• {config.placements.desktop.showSidebar ? '✓' : '✗'} Sidebar ({config.placements.desktop.sidebarAdCount} reklam)</li>
+                <li>• {config.placements.desktop.showInFooter ? '✓' : '✗'} Alt kısım</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Test Buttons */}
+        <div className="mt-4 pt-4 border-t border-blue-200 flex flex-wrap gap-2">
+          <button
+            onClick={() => window.open('/', '_blank')}
+            className="btn-primary text-sm flex items-center space-x-2"
+          >
+            <Eye className="w-4 h-4" />
+            <span>Ana Sayfada Test Et</span>
+          </button>
+
+          <button
+            onClick={() => window.open('/articles', '_blank')}
+            className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm flex items-center space-x-2 transition-colors"
+          >
+            <Eye className="w-3 h-3" />
+            <span>Makaleler</span>
+          </button>
+
+          <button
+            onClick={() => {
+              // Find the first article and open it
+              fetch('/articles/index.json')
+                .then(res => res.json())
+                .then(data => {
+                  if (data.articles && data.articles.length > 0) {
+                    const firstArticle = data.articles[0];
+                    const slug = firstArticle.filename.replace('.md', '').replace(/^\d{4}-\d{2}-\d{2}-/, '');
+                    window.open(`/article/${slug}`, '_blank');
+                  }
+                })
+                .catch(() => {
+                  window.open('/article/bebek-uyku-duzeni-nasil-kurulur', '_blank');
+                });
+            }}
+            className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm flex items-center space-x-2 transition-colors"
+          >
+            <Eye className="w-3 h-3" />
+            <span>Makale Detay</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Ad Preview Section */}
+      <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Reklam Önizleme</h3>
+        <div className="space-y-6">
+          {/* Desktop Preview */}
+          <div>
+            <h4 className="text-sm font-medium text-gray-700 mb-3">Desktop Görünümü</h4>
+            <div className="space-y-4">
+              {config.placements.desktop.showBannerAd && (
+                <div>
+                  <span className="text-xs text-gray-500 block mb-1">Banner (728x90)</span>
+                  <SmartAd
+                    type="banner"
+                    slotId={config.adSlots.desktopBanner}
+                    className="border rounded"
+                    showInAdmin={true}
+                  />
+                </div>
+              )}
+
+              {config.placements.desktop.showSidebar && (
+                <div>
+                  <span className="text-xs text-gray-500 block mb-1">Sidebar (300x250)</span>
+                  <SmartAd
+                    type="sidebar"
+                    slotId={config.adSlots.sidebar}
+                    className="border rounded max-w-xs"
+                    showInAdmin={true}
+                  />
+                </div>
+              )}
+
+              {config.placements.desktop.showAfterParagraph > 0 && (
+                <div>
+                  <span className="text-xs text-gray-500 block mb-1">İçerik Arası (728x90)</span>
+                  <SmartAd
+                    type="inline"
+                    slotId={config.adSlots.articleMiddle}
+                    className="border rounded"
+                    showInAdmin={true}
+                  />
+                </div>
+              )}
+
+              {config.placements.desktop.showInFooter && (
+                <div>
+                  <span className="text-xs text-gray-500 block mb-1">Footer (728x90)</span>
+                  <SmartAd
+                    type="footer"
+                    slotId={config.adSlots.articleBottom}
+                    className="border rounded"
+                    showInAdmin={true}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Mobile Preview */}
+          <div>
+            <h4 className="text-sm font-medium text-gray-700 mb-3">Mobil Görünümü</h4>
+            <div className="space-y-4">
+              {config.placements.mobile.showInHeader && (
+                <div>
+                  <span className="text-xs text-gray-500 block mb-1">Mobil Banner (320x50)</span>
+                  <SmartAd
+                    type="banner"
+                    size="small"
+                    slotId={config.adSlots.mobileInline}
+                    className="border rounded max-w-sm"
+                    showInAdmin={true}
+                  />
+                </div>
+              )}
+
+              {config.placements.mobile.showInlineAds && (
+                <div>
+                  <span className="text-xs text-gray-500 block mb-1">Mobil İçerik (300x250)</span>
+                  <SmartAd
+                    type="inline"
+                    slotId={config.adSlots.mobileInline}
+                    className="border rounded max-w-xs"
+                    showInAdmin={true}
+                  />
+                </div>
+              )}
+
+              {config.placements.mobile.showInFooter && (
+                <div>
+                  <span className="text-xs text-gray-500 block mb-1">Mobil Footer (320x50)</span>
+                  <SmartAd
+                    type="footer"
+                    size="small"
+                    slotId={config.adSlots.articleBottom}
+                    className="border rounded max-w-sm"
+                    showInAdmin={true}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

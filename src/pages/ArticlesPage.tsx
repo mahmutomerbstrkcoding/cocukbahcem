@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArticleCard } from '@/components/ArticleCard';
 import { ArticleMetadata } from '@/domain';
 import { FileAdapterLocal, GetArticleMetadata } from '@/infrastructure';
+import { SmartAd } from '@/components/SmartAd';
 
 export const ArticlesPage: React.FC = () => {
   const [articles, setArticles] = useState<ArticleMetadata[]>([]);
@@ -112,6 +113,15 @@ export const ArticlesPage: React.FC = () => {
           </p>
         </div>
 
+        {/* Top Banner Ad */}
+        <div className="mb-8">
+          <SmartAd
+            type="banner"
+            size="large"
+            className="mx-auto"
+          />
+        </div>
+
         {/* Articles Grid */}
         {articles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -139,6 +149,15 @@ export const ArticlesPage: React.FC = () => {
             </p>
           </div>
         )}
+
+        {/* Footer Ad */}
+        <div className="mt-12 mb-8">
+          <SmartAd
+            type="footer"
+            size="large"
+            className="mx-auto"
+          />
+        </div>
 
         {/* Back to Home Button */}
         <div className="text-center mt-12">

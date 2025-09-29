@@ -1,14 +1,20 @@
-import { isAdsEnabled } from '../config/adsConfig';
+import { AdsManager } from './adsManager';
+import { adsConfig } from '../config/adsConfig';
 
 interface AdInjectionOptions {
   content: string;
-  afterParagraph: number;
+  deviceType: 'mobile' | 'desktop';
 }
 
-export const getAdInsertionPoints = ({ content, afterParagraph }: AdInjectionOptions): number[] => {
-  if (!isAdsEnabled()) {
+const adsManager = AdsManager.getInstance();
+
+export const getAdInsertionPoints = ({ content, deviceType }: AdInjectionOptions): number[] => {
+  if (!adsManager.shouldShowAds()) {
     return [];
   }
+
+  const config = adsConfig.placements[deviceType];
+  const afterParagraph = config.showAfterParagraph;
 
   // Split content by paragraphs to find insertion points
   const paragraphs = content.split('\n\n');
@@ -26,21 +32,32 @@ export const getAdInsertionPoints = ({ content, afterParagraph }: AdInjectionOpt
   return insertionPoints;
 };
 
-export const shouldShowAd = (position: 'header' | 'footer' | 'sidebar', deviceType: 'mobile' | 'desktop'): boolean => {
-  if (!isAdsEnabled()) return false;
+export const shouldShowAd = (
+  position: 'header' | 'footer' | 'sidebar' | 'banner' | 'inline',
+  deviceType: 'mobile' | 'desktop'
+): boolean => {
+  return adsManager.shouldShowAdPlacement(
+    position as 'sidebar' | 'footer' | 'inline' | 'banner',
+    deviceType
+  );
+};
 
-  const placement = deviceType === 'mobile'
-    ? { showInHeader: false, showInFooter: true, showSidebar: false }
-    : { showInHeader: false, showInFooter: true, showSidebar: true };
+// Record article view for ads frequency management
+export const recordArticleView = (): void => {
+  adsManager.recordArticleView();
+};
 
-  switch (position) {
-    case 'header':
-      return deviceType === 'mobile' ? placement.showInHeader : false;
-    case 'footer':
-      return placement.showInFooter;
-    case 'sidebar':
-      return deviceType === 'desktop' && placement.showSidebar;
-    default:
-      return false;
-  }
+// Record ad display for frequency management
+export const recordAdDisplay = (): void => {
+  adsManager.recordAdDisplay();
+};
+
+// Get ad slot ID for a specific placement
+export const getAdSlot = (placement: 'articleTop' | 'articleMiddle' | 'articleBottom' | 'sidebar' | 'mobileInline' | 'desktopBanner'): string => {
+  return adsManager.getAdSlot(placement);
+};
+
+// Check if ads are enabled globally
+export const isAdsEnabled = (): boolean => {
+  return adsConfig.enabled;
 };
