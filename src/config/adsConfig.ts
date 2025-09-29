@@ -1,5 +1,6 @@
 export interface AdsConfig {
   enabled: boolean;
+  debugMode: boolean; // Show sample ads for testing
   googleAdsenseClientId?: string;
   adSlots: {
     articleTop: string;
@@ -32,8 +33,10 @@ export interface AdsConfig {
   };
 }
 
-export const adsConfig: AdsConfig = {
+// Default configuration
+const defaultAdsConfig: AdsConfig = {
   enabled: false, // Master toggle for all ads - starting disabled
+  debugMode: false, // Show sample ads for testing - starting disabled
   googleAdsenseClientId: 'ca-pub-xxxxxxxxxxxxxxxxx', // Replace with your actual AdSense client ID
   adSlots: {
     articleTop: '1234567890',    // Replace with your actual ad slot IDs
@@ -66,6 +69,26 @@ export const adsConfig: AdsConfig = {
   },
 };
 
+// Load configuration from localStorage or use defaults
+const loadAdsConfig = (): AdsConfig => {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem('ads-config');
+    if (stored) {
+      try {
+        const parsedConfig = JSON.parse(stored);
+        // Merge with defaults to ensure all properties exist
+        return { ...defaultAdsConfig, ...parsedConfig };
+      } catch (error) {
+        console.warn('Failed to parse stored ads config, using defaults:', error);
+      }
+    }
+  }
+  return { ...defaultAdsConfig };
+};
+
+// Export the configuration
+export const adsConfig: AdsConfig = loadAdsConfig();
+
 // Helper functions
 export const isAdsEnabled = (): boolean => adsConfig.enabled;
 
@@ -75,4 +98,13 @@ export const getAdPlacement = (device: 'mobile' | 'desktop') => {
 
 export const getAdSlot = (position: keyof AdsConfig['adSlots']): string => {
   return adsConfig.adSlots[position];
+};
+
+// Save configuration to localStorage
+export const saveAdsConfig = (): void => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('ads-config', JSON.stringify(adsConfig));
+    // Dispatch a custom event to notify components of config changes
+    window.dispatchEvent(new CustomEvent('adsConfigChanged'));
+  }
 };

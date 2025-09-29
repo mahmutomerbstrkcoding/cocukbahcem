@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { adsConfig, AdsConfig } from '../../config/adsConfig';
+import { adsConfig, AdsConfig, saveAdsConfig } from '../../config/adsConfig';
 import { AdsManager } from '../../utils/adsManager';
 import { Settings, Eye, EyeOff, Save, AlertCircle, BarChart3, RefreshCw } from 'lucide-react';
 import { SmartAd } from '../SmartAd';
@@ -18,6 +18,10 @@ export const AdsConfigPanel: React.FC = () => {
 
     // Update the global config immediately for preview
     adsConfig.enabled = newConfig.enabled;
+    // Notify components of the change
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('adsConfigChanged'));
+    }
   };
 
   const handleClientIdChange = (value: string) => {
@@ -70,11 +74,12 @@ export const AdsConfigPanel: React.FC = () => {
     // Update the global config
     Object.assign(adsConfig, config);
 
+    // Save to localStorage (this will also dispatch the event)
+    saveAdsConfig();
+
     // Update ads manager with new config
     adsManager.updateConfig(config);
 
-    // In a real application, you would save this to a backend
-    // For now, we'll just update the in-memory config
     setIsModified(false);
     setShowSuccess(true);
 
@@ -130,7 +135,12 @@ export const AdsConfigPanel: React.FC = () => {
               Google Ads Durumu
             </h3>
             <p className="text-gray-600">
-              Tüm reklamları {config.enabled ? 'göster' : 'gizle'}
+              {config.enabled
+                ? (config.debugMode
+                    ? 'Örnek reklamlar gösteriliyor (Debug Modu)'
+                    : 'Reklamlar aktif')
+                : 'Tüm reklamlar gizli'
+              }
             </p>
           </div>
 
@@ -138,15 +148,24 @@ export const AdsConfigPanel: React.FC = () => {
             onClick={handleToggleAds}
             className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
               config.enabled
-                ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                ? (config.debugMode
+                    ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
+                    : 'bg-green-100 text-green-800 hover:bg-green-200')
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
             {config.enabled ? (
-              <>
-                <Eye className="w-4 h-4" />
-                <span>Aktif</span>
-              </>
+              config.debugMode ? (
+                <>
+                  <Settings className="w-4 h-4" />
+                  <span>Debug</span>
+                </>
+              ) : (
+                <>
+                  <Eye className="w-4 h-4" />
+                  <span>Aktif</span>
+                </>
+              )
             ) : (
               <>
                 <EyeOff className="w-4 h-4" />
@@ -155,6 +174,66 @@ export const AdsConfigPanel: React.FC = () => {
             )}
           </button>
         </div>
+      </div>
+
+      {/* Debug Mode Toggle */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Debug Modu
+            </h3>
+            <p className="text-gray-600">
+              {config.debugMode
+                ? 'Örnek reklamlar gösteriliyor (test amaçlı)'
+                : 'Gerçek reklamlar veya placeholder gösteriliyor'
+              }
+            </p>
+          </div>
+
+          <button
+            onClick={() => {
+              const newConfig = { ...config, debugMode: !config.debugMode };
+              setConfig(newConfig);
+              setIsModified(true);
+              // Update the global config immediately for preview
+              adsConfig.debugMode = newConfig.debugMode;
+              // Notify components of the change
+              if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('adsConfigChanged'));
+              }
+            }}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
+              config.debugMode
+                ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            {config.debugMode ? (
+              <>
+                <Settings className="w-4 h-4" />
+                <span>Aktif</span>
+              </>
+            ) : (
+              <>
+                <Eye className="w-4 h-4" />
+                <span>Pasif</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {config.debugMode && (
+          <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <div className="flex items-center space-x-2">
+              <AlertCircle className="w-4 h-4 text-yellow-600" />
+              <span className="text-yellow-800 text-sm font-medium">Debug Modu Aktif</span>
+            </div>
+            <p className="text-yellow-700 text-sm mt-1">
+              Tüm sayfalarda örnek reklamlar gösterilecek. Bu mod sadece test amaçlıdır.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* AdSense Configuration */}

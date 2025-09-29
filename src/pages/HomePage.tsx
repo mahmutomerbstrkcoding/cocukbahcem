@@ -5,6 +5,7 @@ import { SmartAd } from '@/components/SmartAd';
 import { ArticleMetadata } from '@/domain';
 import { FileAdapterLocal, GetArticleMetadata } from '@/infrastructure';
 import { getAdSlot, shouldShowAd } from '@/utils/adUtils';
+import { useAdsConfig } from '@/hooks/useAdsConfig';
 
 interface HomePageProps {
   category?: string;
@@ -14,6 +15,9 @@ export const HomePage: React.FC<HomePageProps> = ({ category }) => {
   const [featured, setFeatured] = useState<ArticleMetadata[]>([]);
   const [articles, setArticles] = useState<ArticleMetadata[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Reactive ads config for debug mode updates
+  const adsConfig = useAdsConfig();
   const [debugInfo, setDebugInfo] = useState<string>('Initializing...');
   const navigate = useNavigate();
 
@@ -260,7 +264,7 @@ export const HomePage: React.FC<HomePageProps> = ({ category }) => {
       </section>
 
       {/* Mid-page Ad */}
-      {!category && shouldShowAd('inline', 'desktop') && (
+      {!category && (shouldShowAd('inline', 'desktop') || adsConfig.debugMode) && (
         <section className="mt-12 mb-8">
           <SmartAd
             type="inline"
@@ -331,7 +335,7 @@ export const HomePage: React.FC<HomePageProps> = ({ category }) => {
       )}
 
       {/* Bottom Ad */}
-      {shouldShowAd('footer', 'desktop') && (
+      {(shouldShowAd('footer', 'desktop') || adsConfig.debugMode) && (
         <section className="mt-16 mb-8">
           <SmartAd
             type="footer"

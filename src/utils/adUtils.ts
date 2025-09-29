@@ -36,6 +36,17 @@ export const shouldShowAd = (
   position: 'header' | 'footer' | 'sidebar' | 'banner' | 'inline',
   deviceType: 'mobile' | 'desktop'
 ): boolean => {
+  // If ads are not enabled at all, don't show
+  if (!adsConfig.enabled) {
+    return false;
+  }
+
+  // If debug mode is enabled, always show ads (bypass all checks)
+  if (adsConfig.debugMode) {
+    return true;
+  }
+
+  // Otherwise, use the normal placement logic
   return adsManager.shouldShowAdPlacement(
     position as 'sidebar' | 'footer' | 'inline' | 'banner',
     deviceType

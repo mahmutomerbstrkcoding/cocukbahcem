@@ -10,6 +10,7 @@ import { ArticleContentWithAds } from '@/components/ArticleContentWithAds';
 import { SmartAd } from '@/components/SmartAd';
 import { useAdPlacements } from '@/hooks/useDeviceType';
 import { shouldShowAd, getAdSlot } from '@/utils/adUtils';
+import { useAdsConfig } from '@/hooks/useAdsConfig';
 
 export const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -23,10 +24,15 @@ export const ArticlePage: React.FC = () => {
   const fileAdapter = FileAdapterLocal.getInstance();
   const getArticleMetadata = new GetArticleMetadata(fileAdapter);
 
-  // Ad placements
+  // Ad placements - use reactive config to ensure updates when debug mode changes
+  const adsConfig = useAdsConfig(); // Triggers re-render when config changes
   const adPlacements = useAdPlacements();
-  const showSidebarAd = shouldShowAd('sidebar', adPlacements.deviceType);
-  const showFooterAd = shouldShowAd('footer', adPlacements.deviceType);
+
+  // Recompute ad visibility when config changes (especially debug mode)
+  // The adsConfig dependency ensures these are recalculated when debug mode changes
+  const showSidebarAd = shouldShowAd('sidebar', adPlacements.deviceType) || adsConfig.debugMode;
+  const showFooterAd = shouldShowAd('footer', adPlacements.deviceType) || adsConfig.debugMode;
+  const showBannerAd = shouldShowAd('banner', 'desktop') || adsConfig.debugMode;
 
   useEffect(() => {
     if (slug) {
@@ -199,7 +205,7 @@ export const ArticlePage: React.FC = () => {
       </header>
 
       {/* Top Banner Ad - Desktop only */}
-      {adPlacements.deviceType === 'desktop' && shouldShowAd('banner', 'desktop') && (
+      {adPlacements.deviceType === 'desktop' && showBannerAd && (
         <div className="mb-8">
           <SmartAd
             type="banner"

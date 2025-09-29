@@ -1,7 +1,8 @@
 import React from 'react';
-import { adsConfig } from '../config/adsConfig';
 import { AdsManager } from '../utils/adsManager';
 import { AdPlaceholder } from './AdPlaceholder';
+import { SampleAd } from './SampleAd';
+import { useAdsConfig } from '../hooks/useAdsConfig';
 
 interface SmartAdProps {
   type: 'banner' | 'sidebar' | 'inline' | 'footer';
@@ -22,8 +23,12 @@ export const SmartAd: React.FC<SmartAdProps> = ({
   showInAdmin = false,
   onConfigClick
 }) => {
-  // Check if ads are enabled
+  // Use the reactive hook to get current config
+  const adsConfig = useAdsConfig();
+
+  // Read config values - these will now be reactive
   const adsEnabled = adsConfig.enabled;
+  const debugMode = adsConfig.debugMode;
 
   // Check if Google AdSense is properly configured
   const hasValidConfig = adsConfig.googleAdsenseClientId &&
@@ -38,6 +43,17 @@ export const SmartAd: React.FC<SmartAdProps> = ({
   // If ads are disabled, show nothing
   if (!adsEnabled) {
     return null;
+  }
+
+  // If debug mode is enabled, show sample ad
+  if (debugMode) {
+    return (
+      <SampleAd
+        type={type}
+        size={size}
+        className={className}
+      />
+    );
   }
 
   // If ads are enabled but not properly configured, show placeholder

@@ -22,6 +22,14 @@ class AdsManager {
         sessionStartTime: Date.now(),
       };
     }
+
+    // Listen for config changes
+    if (typeof window !== 'undefined') {
+      window.addEventListener('adsConfigChanged', () => {
+        // Config has been updated, AdsManager will use the updated adsConfig automatically
+        // since it references the same object
+      });
+    }
   }
 
   static getInstance(): AdsManager {
@@ -35,6 +43,11 @@ class AdsManager {
   shouldShowAds(): boolean {
     if (!adsConfig.enabled) {
       return false;
+    }
+
+    // If debug mode is enabled, always show ads (ignore frequency rules)
+    if (adsConfig.debugMode) {
+      return true;
     }
 
     const now = Date.now();
@@ -76,6 +89,8 @@ class AdsManager {
   // Update configuration (for admin panel)
   updateConfig(newConfig: Partial<AdsConfig>): void {
     Object.assign(adsConfig, newConfig);
+    // Save config to localStorage
+    localStorage.setItem('ads-config', JSON.stringify(adsConfig));
   }
 
   // Check if specific ad placement should be shown
@@ -85,6 +100,11 @@ class AdsManager {
   ): boolean {
     if (!this.shouldShowAds()) {
       return false;
+    }
+
+    // If debug mode is enabled, show all placements regardless of configuration
+    if (adsConfig.debugMode) {
+      return true;
     }
 
     if (deviceType === 'mobile') {
