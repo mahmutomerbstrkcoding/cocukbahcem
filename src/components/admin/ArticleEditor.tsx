@@ -535,7 +535,7 @@ public/articles/${articleData.category}/${filename}
                                 {article.title}
                               </div>
                               <div className="text-xs text-gray-500 truncate">
-                                {article.category} • {article.date}
+                                {article.category} • {typeof article.date === 'string' ? article.date : new Date(article.date).toLocaleDateString('tr-TR')}
                               </div>
                             </div>
                           </label>

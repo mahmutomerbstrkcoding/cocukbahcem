@@ -23,6 +23,8 @@ export const AdminDashboard: React.FC = () => {
   const loadArticles = async () => {
     try {
       setLoading(true);
+      // Initialize the file adapter first
+      await fileAdapter.initialize();
       const getArticleMetadata = new GetArticleMetadata(fileAdapter);
       const articleList = await getArticleMetadata.getAll();
       setArticles(articleList);
@@ -341,7 +343,7 @@ export const AdminDashboard: React.FC = () => {
 
                       <div className="flex items-center space-x-2 ml-6">
                         <button
-                          onClick={() => window.open(`/articles/${article.id}`, '_blank')}
+                          onClick={() => window.open(`/article/${article.slug}`, '_blank')}
                           className="p-3 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
                           title="Görüntüle"
                         >
@@ -411,7 +413,7 @@ export const AdminDashboard: React.FC = () => {
 
                     <div className="flex items-center space-x-2 ml-6">
                       <button
-                        onClick={() => window.open(`/articles/${article.id}`, '_blank')}
+                        onClick={() => window.open(`/article/${article.slug}`, '_blank')}
                         className="p-3 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
                         title="Görüntüle"
                       >

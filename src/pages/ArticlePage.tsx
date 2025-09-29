@@ -40,6 +40,9 @@ export const ArticlePage: React.FC = () => {
       setIsLoading(true);
       setError(null);
 
+      // Initialize the file adapter first
+      await fileAdapter.initialize();
+
       const articleData = await getArticleMetadata.getBySlug(articleSlug);
 
       if (!articleData) {
