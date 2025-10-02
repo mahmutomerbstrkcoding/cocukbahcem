@@ -6,21 +6,24 @@ export const CATEGORY_MAPPING = {
   'family': 'aile-hayati',
   'tips': 'ipuclari',
   'preschool': 'okul-oncesi',
+  'contact': 'iletisim',
 
   // New system -> Old system (for file lookups)
   'hamilelik': 'pregnancy',
   'bebekler': 'babies',
   'aile-hayati': 'family',
   'ipuclari': 'tips',
-  'okul-oncesi': 'preschool', // Create proper mapping for preschool
+  'okul-oncesi': 'preschool',
+  'iletisim': 'contact',
 } as const;
 
 export const CATEGORY_DISPLAY_NAMES = {
-  'aile-hayati': 'Aile Hayatı',
+  'aile-hayati': 'Aile',
   'bebekler': 'Bebekler',
   'hamilelik': 'Hamilelik',
   'okul-oncesi': 'Okul Öncesi',
   'ipuclari': 'İpuçları',
+  'iletisim': 'İletişim',
 } as const;
 
 export const CATEGORY_ICONS = {
@@ -29,6 +32,7 @@ export const CATEGORY_ICONS = {
   'hamilelik': '🤱',
   'okul-oncesi': '🎒',
   'ipuclari': '💡',
+  'iletisim': '📞',
 } as const;
 
 // Convert old category name to new category name

@@ -235,10 +235,42 @@ public/articles/${articleData.category}/${filename}
   };
 
   const categories = [
-    { value: 'pregnancy', label: 'Hamilelik' },
-    { value: 'babies', label: 'Bebekler' },
-    { value: 'family', label: 'Aile' },
-    { value: 'tips', label: 'İpuçları' }
+    {
+      value: 'family',
+      label: 'Aile',
+      icon: '👨‍👩‍👧‍👦',
+      description: 'Aile yaşamı ve ebeveynlik önerileri'
+    },
+    {
+      value: 'babies',
+      label: 'Bebekler',
+      icon: '👶',
+      description: 'Bebek bakımı, gelişim ve sağlık rehberleri'
+    },
+    {
+      value: 'pregnancy',
+      label: 'Hamilelik',
+      icon: '🤱',
+      description: 'Hamilelik süreci, beslenme ve sağlık bilgileri'
+    },
+    {
+      value: 'preschool',
+      label: 'Okul Öncesi',
+      icon: '🎒',
+      description: 'Okul öncesi eğitim ve gelişim rehberleri'
+    },
+    {
+      value: 'tips',
+      label: 'İpuçları',
+      icon: '💡',
+      description: 'Pratik ipuçları ve günlük hayat önerileri'
+    },
+    {
+      value: 'contact',
+      label: 'İletişim',
+      icon: '📞',
+      description: 'İletişim ve destek bilgileri'
+    }
   ];
 
   const handleImagePick = () => {
