@@ -1,0 +1,23 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Çocuk Bahçem Blog",
+  "description": "Hamilelik, bebek bakımı ve aile hayatı hakkında güncel makaleler",
+  "url": "https://cocukbahcem.netlify.app/articles",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Çocuk Bahçem",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://cocukbahcem.netlify.app/assets/images/logo.png"
+    }
+  },
+  "inLanguage": "tr",
+  "keywords": ["hamilelik", "bebek bakımı", "anne", "baba", "çocuk gelişimi", "okul öncesi", "aile", "ebeveynlik", "bebek uyku", "beslenme"],
+  "genre": ["Health", "Family", "Parenting", "Children"],
+  "audience": {
+    "@type": "Audience",
+    "audienceType": "Parents and expecting parents",
+    "geographicArea": "Turkey"
+  }
+}

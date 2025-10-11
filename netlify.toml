@@ -10,6 +10,43 @@
 [build.environment]
   NODE_VERSION = "18"
 
+# SEO and Security Headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # SEO Headers
+    X-Robots-Tag = "index, follow"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Performance
+    X-DNS-Prefetch-Control = "on"
+    
+    # Language
+    Content-Language = "tr"
+
+# Sitemap and Robots specific headers
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Content-Type = "application/xml"
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Content-Type = "text/plain"
+    Cache-Control = "public, max-age=86400"
+
+# Structured data headers
+[[headers]]
+  for = "/structured-data/*.json"
+  [headers.values]
+    Content-Type = "application/ld+json"
+    Cache-Control = "public, max-age=86400"
+
 # Headers for better caching
 [[headers]]
   for = "/assets/*"
@@ -30,3 +67,19 @@
   for = "*.woff2"
   [headers.values]
     cache-control = "public, max-age=31536000"
+
+# Image optimization headers
+[[headers]]
+  for = "*.jpg"
+  [headers.values]
+    cache-control = "public, max-age=2592000"
+
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    cache-control = "public, max-age=2592000"
+
+[[headers]]
+  for = "*.webp"
+  [headers.values]
+    cache-control = "public, max-age=2592000"

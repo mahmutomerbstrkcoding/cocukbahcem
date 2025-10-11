@@ -1,0 +1,31 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Çocuk Bahçem",
+  "description": "Anne ve bebek bakımı konularında güvenilir kaynak",
+  "url": "https://cocukbahcem.netlify.app/",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://cocukbahcem.netlify.app/assets/images/logo.png",
+    "width": 300,
+    "height": 60
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Customer Service",
+    "availableLanguage": ["Turkish"]
+  },
+  "sameAs": [
+    "https://www.instagram.com/cocukbahcem",
+    "https://www.facebook.com/cocukbahcem",
+    "https://twitter.com/cocukbahcem"
+  ],
+  "founder": {
+    "@type": "Person",
+    "name": "Çocuk Bahçem Ekibi"
+  },
+  "foundingDate": "2025",
+  "keywords": "hamilelik, bebek bakımı, anne, baba, çocuk gelişimi, okul öncesi, aile, ebeveynlik",
+  "areaServed": "Turkey",
+  "knowsLanguage": "tr"
+}

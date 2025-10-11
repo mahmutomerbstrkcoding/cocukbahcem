@@ -1,0 +1,27 @@
+User-agent: *
+Allow: /
+
+# Disallow admin pages
+Disallow: /admin
+
+# Allow important pages
+Allow: /articles/
+Allow: /search
+
+# Sitemap location
+Sitemap: https://cocukbahcem.netlify.app/sitemap.xml
+
+# Crawl delay (optional - helps with server load)
+Crawl-delay: 1
+
+# Additional instructions for specific bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Block access to sensitive files
+Disallow: *.json$
+Disallow: /api/
+Disallow: /_*
