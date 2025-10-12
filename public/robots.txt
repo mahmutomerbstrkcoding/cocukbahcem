@@ -9,7 +9,7 @@ Allow: /articles/
 Allow: /search
 
 # Sitemap location
-Sitemap: https://cocukbahcem.netlify.app/sitemap.xml
+Sitemap: https://cocukbahcem.com/sitemap.xml
 
 # Crawl delay (optional - helps with server load)
 Crawl-delay: 1

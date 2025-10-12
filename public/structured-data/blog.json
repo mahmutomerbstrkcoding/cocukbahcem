@@ -3,13 +3,13 @@
   "@type": "Blog",
   "name": "Çocuk Bahçem Blog",
   "description": "Hamilelik, bebek bakımı ve aile hayatı hakkında güncel makaleler",
-  "url": "https://cocukbahcem.netlify.app/articles",
+  "url": "https://cocukbahcem.com/articles",
   "publisher": {
     "@type": "Organization",
     "name": "Çocuk Bahçem",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://cocukbahcem.netlify.app/assets/images/cocukbahcem2.png"
+      "url": "https://cocukbahcem.com/assets/images/cocukbahcem2.png"
     }
   },
   "inLanguage": "tr",

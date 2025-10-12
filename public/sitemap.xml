@@ -8,7 +8,7 @@
 
     <!-- Homepage -->
     <url>
-        <loc>https://cocukbahcem.netlify.app/</loc>
+        <loc>https://cocukbahcem.com/</loc>
         <lastmod>2025-10-12</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
@@ -16,7 +16,7 @@
 
     <!-- Articles listing page -->
     <url>
-        <loc>https://cocukbahcem.netlify.app/articles</loc>
+        <loc>https://cocukbahcem.com/articles</loc>
         <lastmod>2025-10-12</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
@@ -24,7 +24,7 @@
 
     <!-- Search page -->
     <url>
-        <loc>https://cocukbahcem.netlify.app/search</loc>
+        <loc>https://cocukbahcem.com/search</loc>
         <lastmod>2025-10-12</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
@@ -32,35 +32,35 @@
 
     <!-- Category pages -->
     <url>
-        <loc>https://cocukbahcem.netlify.app/articles/pregnancy</loc>
+        <loc>https://cocukbahcem.com/articles/pregnancy</loc>
         <lastmod>2025-09-01</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://cocukbahcem.netlify.app/articles/babies</loc>
+        <loc>https://cocukbahcem.com/articles/babies</loc>
         <lastmod>2025-09-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://cocukbahcem.netlify.app/articles/family</loc>
+        <loc>https://cocukbahcem.com/articles/family</loc>
         <lastmod>2025-09-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://cocukbahcem.netlify.app/articles/tips</loc>
+        <loc>https://cocukbahcem.com/articles/tips</loc>
         <lastmod>2025-09-29</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://cocukbahcem.netlify.app/articles/preschool</loc>
+        <loc>https://cocukbahcem.com/articles/preschool</loc>
         <lastmod>2025-09-30</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
@@ -68,7 +68,7 @@
 
     <!-- Individual articles -->
     <url>
-        <loc>https://cocukbahcem.netlify.app/articles/pregnancy/hamilelikte-beslenme</loc>
+        <loc>https://cocukbahcem.com/articles/pregnancy/hamilelikte-beslenme</loc>
         <lastmod>2025-09-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
@@ -83,7 +83,7 @@
     </url>
 
     <url>
-        <loc>https://cocukbahcem.netlify.app/articles/babies/bebek-uyku-duzeni</loc>
+        <loc>https://cocukbahcem.com/articles/babies/bebek-uyku-duzeni</loc>
         <lastmod>2025-09-15</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
@@ -98,7 +98,7 @@
     </url>
 
     <url>
-        <loc>https://cocukbahcem.netlify.app/articles/preschool/okul-oncesi-egitim</loc>
+        <loc>https://cocukbahcem.com/articles/preschool/okul-oncesi-egitim</loc>
         <lastmod>2025-09-30</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>

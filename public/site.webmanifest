@@ -19,7 +19,7 @@
     },
     {
       "src": "/assets/images/cocukbahcem2.png",
-      "sizes": "512x512", 
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
@@ -30,13 +30,13 @@
     },
     {
       "src": "/assets/images/cocukbahcem2.png",
-      "sizes": "32x32", 
+      "sizes": "32x32",
       "type": "image/png"
     },
     {
       "src": "/assets/images/cocukbahcem2.png",
       "sizes": "48x48",
-      "type": "image/png" 
+      "type": "image/png"
     },
     {
       "src": "/assets/images/cocukbahcem2.png",

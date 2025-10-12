@@ -3,10 +3,10 @@
   "@type": "Organization",
   "name": "Çocuk Bahçem",
   "description": "Anne ve bebek bakımı konularında güvenilir kaynak",
-  "url": "https://cocukbahcem.netlify.app/",
+  "url": "https://cocukbahcem.com/",
   "logo": {
     "@type": "ImageObject",
-    "url": "https://cocukbahcem.netlify.app/assets/images/cocukbahcem2.png",
+    "url": "https://cocukbahcem.com/assets/images/cocukbahcem2.png",
     "width": 300,
     "height": 60
   },
