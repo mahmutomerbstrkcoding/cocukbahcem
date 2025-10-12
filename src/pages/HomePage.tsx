@@ -127,8 +127,17 @@ export const HomePage: React.FC<HomePageProps> = ({ category }) => {
 
               {/* Content */}
               <div className="relative z-10">
+                {/* Logo */}
+                <div className="flex justify-center mb-8">
+                  <img 
+                    src="/assets/images/cocukbahcem2.png" 
+                    alt="Çocuk Bahçem Logo" 
+                    className="h-24 w-auto drop-shadow-lg"
+                  />
+                </div>
+                
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 drop-shadow-sm">
-                  🌸 Merhaba, Sevgili Anne! 👋
+                  Merhaba, Sevgili Anne! 👋
                 </h1>
 
                 <p className="text-lg sm:text-xl text-white/90 max-width-600 mx-auto leading-relaxed mb-8 max-w-2xl">
