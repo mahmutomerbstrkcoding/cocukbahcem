@@ -31,9 +31,9 @@ export const Header: React.FC<HeaderProps> = ({ onSearch }) => {
           {/* Logo */}
           <div className="flex items-center">
             <a href="/" className="flex items-center space-x-3">
-              <img 
-                src="/assets/images/cocukbahcem2.png" 
-                alt="Çocuk Bahçem Logo" 
+              <img
+                src="/assets/images/cocukbahcem2.png"
+                alt="Çocuk Bahçem Logo"
                 className="h-10 w-auto"
               />
               <span className="text-xl font-display font-semibold text-white">

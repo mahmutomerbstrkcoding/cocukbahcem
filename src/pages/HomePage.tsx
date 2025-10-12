@@ -129,13 +129,13 @@ export const HomePage: React.FC<HomePageProps> = ({ category }) => {
               <div className="relative z-10">
                 {/* Logo */}
                 <div className="flex justify-center mb-8">
-                  <img 
-                    src="/assets/images/cocukbahcem2.png" 
-                    alt="Çocuk Bahçem Logo" 
+                  <img
+                    src="/assets/images/cocukbahcem2.png"
+                    alt="Çocuk Bahçem Logo"
                     className="h-24 w-auto drop-shadow-lg"
                   />
                 </div>
-                
+
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 drop-shadow-sm">
                   Merhaba, Sevgili Anne! 👋
                 </h1>
