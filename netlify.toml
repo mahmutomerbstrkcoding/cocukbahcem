@@ -53,13 +53,13 @@
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    
+
     # Performance and Caching
     X-DNS-Prefetch-Control = "on"
-    
+
     # Language and Location
     Content-Language = "tr"
-    
+
     # Additional SEO signals
     X-UA-Compatible = "IE=edge"
 
