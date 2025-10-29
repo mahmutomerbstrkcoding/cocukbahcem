@@ -2,6 +2,39 @@
   publish = "dist"
   command = "npm run build"
 
+# Force HTTPS and WWW redirects
+[[redirects]]
+  from = "http://cocukbahcem.com/*"
+  to = "https://cocukbahcem.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.cocukbahcem.com/*"
+  to = "https://cocukbahcem.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.cocukbahcem.com/*"
+  to = "https://cocukbahcem.com/:splat"
+  status = 301
+  force = true
+
+# Netlify domain redirects
+[[redirects]]
+  from = "https://cocukbahcem.netlify.app/*"
+  to = "https://cocukbahcem.com/:splat"
+  status = 301
+  force = true
+
+# API routes (if you have any)
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# SPA fallback - should be last
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -14,18 +47,21 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    # SEO Headers
-    X-Robots-Tag = "index, follow"
+    # Enhanced SEO Headers
+    X-Robots-Tag = "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
-
-    # Performance
+    
+    # Performance and Caching
     X-DNS-Prefetch-Control = "on"
-
-    # Language
+    
+    # Language and Location
     Content-Language = "tr"
+    
+    # Additional SEO signals
+    X-UA-Compatible = "IE=edge"
 
 # Sitemap and Robots specific headers
 [[headers]]

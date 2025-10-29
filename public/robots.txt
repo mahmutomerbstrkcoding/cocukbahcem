@@ -1,27 +1,47 @@
 User-agent: *
 Allow: /
 
-# Disallow admin pages
-Disallow: /admin
+# Disallow admin and system pages
+Disallow: /admin/
+Disallow: /_*
+Disallow: /.well-known/
+Disallow: /api/
 
-# Allow important pages
+# Explicitly allow important pages
+Allow: /
 Allow: /articles/
 Allow: /search
+Allow: /hamilelik
+Allow: /bebekler
+Allow: /aile-hayati
+Allow: /okul-oncesi
+Allow: /ipuclari
+
+# Allow assets and media
+Allow: /assets/
+Allow: /*.css
+Allow: /*.js
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.webp
 
 # Sitemap location
 Sitemap: https://cocukbahcem.com/sitemap.xml
 
-# Crawl delay (optional - helps with server load)
+# Crawl delay for respectful crawling
 Crawl-delay: 1
 
-# Additional instructions for specific bots
+# Specific bot instructions
 User-agent: Googlebot
 Allow: /
+Crawl-delay: 0
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 1
 
-# Block access to sensitive files
+# Block sensitive file patterns
+User-agent: *
 Disallow: *.json$
-Disallow: /api/
-Disallow: /_*
+Disallow: /node_modules/
+Disallow: /.git/

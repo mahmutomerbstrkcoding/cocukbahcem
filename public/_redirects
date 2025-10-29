@@ -1,1 +1,17 @@
+# Force HTTPS and canonical domain
+http://cocukbahcem.com/*  https://cocukbahcem.com/:splat  301!
+http://www.cocukbahcem.com/*  https://cocukbahcem.com/:splat  301!
+https://www.cocukbahcem.com/*  https://cocukbahcem.com/:splat  301!
+https://cocukbahcem.netlify.app/*  https://cocukbahcem.com/:splat  301!
+
+# API routes
+/api/*  /.netlify/functions/:splat  200
+
+# Static files (bypass SPA routing)
+/sitemap.xml  /sitemap.xml  200
+/robots.txt  /robots.txt  200
+/favicon.ico  /favicon.ico  200
+/assets/*  /assets/:splat  200
+
+# SPA fallback (must be last)
 /*    /index.html   200

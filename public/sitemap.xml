@@ -9,7 +9,7 @@
     <!-- Homepage -->
     <url>
         <loc>https://cocukbahcem.com/</loc>
-        <lastmod>2025-10-12</lastmod>
+        <lastmod>2025-10-30</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
@@ -17,7 +17,7 @@
     <!-- Articles listing page -->
     <url>
         <loc>https://cocukbahcem.com/articles</loc>
-        <lastmod>2025-10-12</lastmod>
+        <lastmod>2025-10-30</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>
@@ -25,12 +25,48 @@
     <!-- Search page -->
     <url>
         <loc>https://cocukbahcem.com/search</loc>
-        <lastmod>2025-10-12</lastmod>
+        <lastmod>2025-10-30</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
 
-    <!-- Category pages -->
+    <!-- Main category pages -->
+    <url>
+        <loc>https://cocukbahcem.com/hamilelik</loc>
+        <lastmod>2025-10-30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <url>
+        <loc>https://cocukbahcem.com/bebekler</loc>
+        <lastmod>2025-10-30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <url>
+        <loc>https://cocukbahcem.com/aile-hayati</loc>
+        <lastmod>2025-10-30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <url>
+        <loc>https://cocukbahcem.com/okul-oncesi</loc>
+        <lastmod>2025-10-30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <url>
+        <loc>https://cocukbahcem.com/ipuclari</loc>
+        <lastmod>2025-10-30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Legacy category pages -->
     <url>
         <loc>https://cocukbahcem.com/articles/pregnancy</loc>
         <lastmod>2025-09-01</lastmod>
